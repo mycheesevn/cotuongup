@@ -1,0 +1,38 @@
+-- 006_cu_notifications.sql — Push / notification glue for Cờ Úp.
+-- Run in the Dashboard SQL editor AFTER 005. Idempotent.
+--
+-- VERIFIED SHARED TABLES (do NOT recreate): unlike Caro/Checkers, which
+-- created per-game <prefix>_push_subscriptions / <prefix>_notifications
+-- tables, Cờ Úp is ported from PacClone (Xiangqi), whose migrations
+-- created the SHARED, unprefixed tables on this same Supabase project:
+--   * public.push_subscriptions (xiangqi/supabase/migrations/
+--     push_subscriptions.sql) — owner-only RLS, one row per
+--     user+endpoint. The Cờ Úp app subscribes against THIS table; the
+--     subscription is per-USER, not per-game, so one subscription
+--     already receives Cờ Úp pushes.
+--   * public.notifications (xiangqi/supabase/migrations/
+--     notifications.sql) — the shared in-app inbox (user SELECT/UPDATE
+--     own rows, no client INSERT; server writes via service role) plus
+--     unread_notification_count(). Cờ Úp events are rows in this table.
+-- Both tables already exist in production, so this file creates
+-- NOTHING. Recreating per-game copies would split the user's
+-- subscriptions and inbox across games — explicitly not wanted.
+--
+-- Cờ Úp-specific glue is by CONVENTION, enforced in app/server code:
+--   * notification kinds written for Cờ Úp events: 'challenge',
+--     'challenge_declined', 'room_turn' (your turn in a live room
+--     match), 'corr_turn' / 'corr_end' (correspondence), 'room_invite'.
+--   * notification `url` values for Cờ Úp always point at the canonical
+--     host paths on https://cotuongup.synerworlds.com (deep links use
+--     ?room=<code> / ?corr=<id>), never window.location.origin.
+--   * push payload titles carry the 🃏 marker so Cờ Úp pushes are
+--     distinguishable from the other 13 games on the lock screen.
+--   * The VAPID keypair + SUPABASE_SERVICE_ROLE_KEY are the shared
+--     family values already set on the other projects (see
+--     LAUNCH_NOTES.md) — no SQL is involved.
+--
+-- The statement below is a deliberate no-op marker so the run order
+-- stays explicit in the ledger and re-runs are harmless.
+do $$ begin
+  raise notice '006_cu_notifications: shared push_subscriptions/notifications in use; nothing to create.';
+end $$;

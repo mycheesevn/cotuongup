@@ -1,0 +1,3721 @@
+:root {
+  --bg: #14100c;
+  --panel: #1e1812;
+  --panel-2: #262019;
+  --ink: #f3e9d7;
+  --muted: #b9a88d;
+  --accent: #701e24;
+  --accent-2: #c99636;
+  /* Semantic success green — formerly --accent-2's PacClone value. The
+     brass --accent-2 now carries the secondary/highlight role; the few
+     usages that genuinely mean "positive/solved/thinking" (paired with
+     hardcoded green backgrounds/text) point here instead. */
+  --success: #2f9e44;
+  --danger: #e03131;
+  --border: #3a2f22;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Noto Sans", sans-serif;
+  background: radial-gradient(1200px 800px at 50% -10%, #241b12 0%, var(--bg) 60%);
+  color: var(--ink);
+  min-height: 100dvh;
+}
+
+/* ---------- page frame: board fills the screen, panel docked right ---------- */
+.cu-page {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 10px 16px 12px;
+  /* In standalone PWA mode (viewport-fit=cover) the app extends under the
+     iPhone status bar / home indicator — keep content clear of them. */
+  padding-top: max(10px, calc(env(safe-area-inset-top) + 20px));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  gap: 8px;
+  overflow: hidden;
+}
+.cu-footer {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--muted, #888);
+  padding: 4px 0 2px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.cu-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cu-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cu-menu-btn {
+  background: var(--panel-2);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cu-brand {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.cu-title {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cu-account {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cu-quick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cu-quick .cu-btn {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.cu-quick-spacer {
+  flex: 1;
+}
+
+.cu-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cu-select {
+  background: var(--panel-2);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 0.9rem;
+  max-width: 230px;
+}
+
+.cu-btn {
+  background: var(--panel-2);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cu-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.cu-btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fdf6ec;
+  font-weight: 600;
+}
+
+.cu-btn-icon {
+  padding: 8px 10px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cu-lang {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cu-lang button {
+  background: var(--panel-2);
+  color: var(--muted);
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cu-lang button.active {
+  background: var(--accent);
+  color: #fdf6ec;
+}
+
+.cu-drawer-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cu-drawer-modes button {
+  background: var(--panel-2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cu-drawer-modes button[data-active="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fdf6ec;
+}
+
+.cu-puzzle-banner {
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.cu-puzzle-banner.solved {
+  background: #1f3323;
+  border: 1px solid var(--success);
+  color: #bdf0c8;
+}
+
+.cu-puzzle-banner.failed {
+  background: #3a1f1f;
+  border: 1px solid var(--danger);
+  color: #f5c2c2;
+}
+
+.cu-streak {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.cu-clock-row {
+  display: flex;
+  gap: 8px;
+}
+
+.cu-clock {
+  flex: 1;
+  text-align: center;
+  padding: 8px 6px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+}
+
+.cu-clock.active {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 1px var(--accent-2);
+}
+
+.cu-clock-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+
+.cu-clock-time {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cu-clock.low .cu-clock-time {
+  color: var(--danger);
+}
+
+/* ---------- status / thinking indicator ---------- */
+.cu-status {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 5px 12px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cu-status-over {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cu-status-thinking {
+  border-color: var(--success);
+  background: linear-gradient(
+    100deg,
+    var(--panel) 30%,
+    #1f3323 50%,
+    var(--panel) 70%
+  );
+  background-size: 200% 100%;
+  animation: think-shimmer 1.6s linear infinite;
+  color: #bdf0c8;
+}
+
+@keyframes think-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.cu-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cu-think-meta {
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.cu-dots span {
+  animation: dot-blink 1.2s infinite;
+  display: inline-block;
+}
+
+.cu-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.cu-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dot-blink {
+  0%,
+  60%,
+  100% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+.cu-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid rgba(47, 158, 68, 0.25);
+  border-top-color: var(--success);
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+.cu-spinner-lg {
+  width: 46px;
+  height: 46px;
+  border-width: 5px;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- main layout: board left (fills screen), panel right ---------- */
+.cu-layout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 14px;
+}
+
+.cu-board-area {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+/* Scrollable top-aligned area for list views (history, leaderboard...).
+   Never put a long list inside .cu-board-area: its centering clips the
+   top of overflowing content with no way to scroll back to it. */
+.cu-scroll-area {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.cu-board-fit {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 600 / 664;
+  max-width: 100%;
+}
+
+.cu-board-fit.shake {
+  animation: board-shake 0.4s ease;
+}
+
+/* Big centered "Chiếu tướng! / Check!" flash on a checking move. */
+.cu-check-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 6;
+  animation: cu-check-flash 1s ease forwards;
+}
+
+.cu-check-banner span {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(178, 34, 34, 0.9);
+  border: 2px solid #ffd43b;
+  border-radius: 16px;
+  padding: 10px 26px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+@keyframes cu-check-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  30% {
+    transform: scale(1);
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Checkmate variant: gold on black, stays up for 2s (check banner is 1s). */
+.cu-check-banner.cu-mate-banner {
+  animation-duration: 2s;
+}
+
+.cu-mate-banner span {
+  background: rgba(15, 12, 8, 0.94);
+  color: #ffd43b;
+  border-color: #c0392b;
+  font-size: 2.6rem;
+}
+
+@keyframes board-shake {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  20% {
+    transform: translate(-8px, 5px) rotate(-0.5deg);
+  }
+  40% {
+    transform: translate(7px, -4px) rotate(0.5deg);
+  }
+  60% {
+    transform: translate(-5px, 3px) rotate(-0.3deg);
+  }
+  80% {
+    transform: translate(4px, -2px) rotate(0.2deg);
+  }
+}
+
+.cu-board-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cu-board-area.is-thinking .cu-board-svg {
+  filter: saturate(0.75) brightness(0.82);
+  transition: filter 0.25s ease;
+}
+
+.cu-think-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.cu-panel {
+  width: 330px;
+  flex-shrink: 0;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.cu-panel section h2 {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.cu-stats {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+}
+
+.cu-captured-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+.cu-captured-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.cu-captured-pieces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: flex-end;
+}
+
+.cu-cap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: #f7ead0;
+  border: 1.5px solid currentColor;
+}
+
+.cu-cap.red {
+  color: #a82c20;
+}
+
+.cu-cap.black {
+  color: #2b2724;
+}
+
+.cu-moves {
+  flex: 1;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cu-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.cu-log-num {
+  color: var(--muted);
+  margin-right: 4px;
+}
+
+.cu-log-empty {
+  color: var(--muted);
+}
+
+.cu-help ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ---------- narrow screens: stack vertically, board sized by width ---------- */
+@media (max-width: 920px) {
+  .cu-page {
+    height: auto;
+    overflow: visible;
+    padding: 8px 10px 10px;
+    /* Keep the safe-area fix: this rule otherwise overrides it. */
+    padding-top: max(8px, calc(env(safe-area-inset-top) + 20px));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .cu-title {
+    font-size: 1rem;
+  }
+
+  .cu-layout {
+    flex-direction: column;
+    /* Phones: let tall content (board + comments/panel) scroll vertically.
+       The board stays width-driven and fully visible at the top; extra
+       content sits below, reachable by scroll. Without this, .cu-page's
+       overflow:hidden clips the bottom and the board gets pushed/clipped. */
+    overflow-y: auto;
+    /* Nothing inside board + panel may push the page wider than the
+       screen (which makes the whole view look shifted/zoomed). */
+    overflow-x: hidden;
+  }
+
+  /* iOS Safari auto-zooms the page when a focused input/textarea/select
+     has font-size < 16px, and the zoom sticks afterwards — in the room
+     this made the board look enlarged and shifted as soon as a player
+     tapped the comment box. Force 16px on phones to prevent the zoom. */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  .cu-board-area {
+    /* Block (not flex) on phones: the board is width-driven here, and plain
+       block layout sizes width:100% + aspect-ratio predictably on mobile
+       Safari, with no flex-item percentage quirks to shift the board. */
+    display: block;
+    padding: 2px;
+  }
+
+  .cu-board-area .cu-empty-note {
+    margin: 12px auto;
+  }
+
+  .cu-board-fit {
+    width: 100%;
+    height: auto;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .cu-room-board-wrap {
+    height: auto;
+  }
+
+  .cu-board-fit.cu-room-board-fit {
+    flex: none;
+    width: 100%;
+    height: auto;
+    max-width: 560px;
+  }
+
+  .cu-panel {
+    width: 100%;
+    max-height: none;
+  }
+
+  .cu-moves .cu-log {
+    max-height: 220px;
+  }
+}
+
+.cu-evalbar {
+  height: 14px;
+  border-radius: 7px;
+  background: #2b2b2b;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.cu-evalbar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c0392b, #e74c3c);
+  transition: width 0.3s ease;
+}
+
+.cu-navbtns {
+  display: flex;
+  gap: 8px;
+}
+
+.cu-navbtns .cu-btn {
+  flex: 1;
+  font-size: 1.1rem;
+  padding: 6px 0;
+}
+
+.cu-progress {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.cu-progress-fill {
+  height: 100%;
+  background: var(--accent-2);
+  transition: width 0.2s ease;
+}
+
+.cu-movelist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.cu-moverow {
+  display: flex;
+  gap: 4px;
+}
+
+.cu-movecell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--panel-2);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--ink);
+  padding: 5px 7px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+}
+
+.cu-movecell.empty {
+  visibility: hidden;
+}
+
+.cu-movecell.active {
+  border-color: var(--accent);
+}
+
+.cu-movenum {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.cu-movetext {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cu-moveeval {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.cu-cls {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 0.75rem;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.cu-cls-best {
+  color: #ffd43b;
+}
+
+.cu-cls-good {
+  color: #69db7c;
+}
+
+.cu-cls-inaccuracy {
+  color: #ffd43b;
+}
+
+.cu-cls-mistake {
+  color: #ffa94d;
+}
+
+.cu-cls-blunder {
+  color: #ff6b6b;
+}
+
+/* ---------- move commentary (replay) ---------- */
+.cu-comment {
+  border-left: 4px solid var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 12px;
+  line-height: 1.6;
+}
+
+.cu-comment-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.cu-comment-detail {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.cu-comment-best {
+  border-left-color: #ffd43b;
+}
+
+.cu-comment-good {
+  border-left-color: #69db7c;
+}
+
+.cu-comment-inaccuracy {
+  border-left-color: #ffd43b;
+}
+
+.cu-comment-mistake {
+  border-left-color: #ffa94d;
+}
+
+.cu-comment-blunder {
+  border-left-color: #ff6b6b;
+}
+
+.cu-empty-note {
+  color: var(--muted);
+  text-align: center;
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.cu-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.cu-palbtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--panel-2);
+  color: var(--ink);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.cu-palbtn.red {
+  color: #d63031;
+}
+
+.cu-palbtn.black {
+  color: var(--ink);
+}
+
+.cu-palbtn.tool {
+  border-radius: 10px;
+  font-size: 1.1rem;
+}
+
+.cu-palbtn.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.cu-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+
+.cu-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin: 6px 0;
+}
+
+.cu-btn.primary {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Auth modal */
+.cu-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.cu-modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.cu-modal h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.cu-modal-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+/* 📡 Go Live modal */
+.cu-live-modal .cu-field { display: block; margin: 10px 0; }
+.cu-live-modal .cu-field span { display: block; margin-bottom: 4px; font-size: 0.9rem; }
+.cu-live-modal .cu-input { width: 100%; box-sizing: border-box; }
+.cu-live-note { margin: 8px 0; font-size: 0.92rem; line-height: 1.45; opacity: 0.9; }
+.cu-live-keynote { font-size: 0.8rem; opacity: 0.65; margin-top: 14px; }
+.cu-live-error { margin: 10px 0; font-size: 0.92rem; line-height: 1.45; color: #ff9d8a; }
+.cu-live-check { display: flex; align-items: center; gap: 8px; margin: 10px 0; font-size: 0.9rem; cursor: pointer; }
+
+/* 📡 Stream-mode branding (rendered inside the captured tab) */
+.cu-live-dot {
+  width: 11px; height: 11px; border-radius: 50%; background: #ff4747;
+  display: inline-block; flex: none;
+  animation: cu-live-pulse 1.2s ease-in-out infinite;
+}
+@keyframes cu-live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.cu-live-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 54px; z-index: 90;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 0 14px;
+  background: linear-gradient(90deg, #7c161d 0%, #a11d26 55%, #7c161d 100%);
+  color: #fff; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+.cu-live-bar-brand { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.cu-live-bar-domain { font-size: 1.3rem; font-weight: 800; letter-spacing: 0.03em; white-space: nowrap; }
+.cu-live-bar-tagline { font-size: 0.9rem; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cu-live-bar-controls { display: flex; align-items: center; gap: 12px; flex: none; }
+.cu-live-bar-onair { display: flex; align-items: center; gap: 7px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cu-live-stop { background: rgba(255, 255, 255, 0.14); color: #fff; border: 1px solid rgba(255, 255, 255, 0.5); }
+
+.cu-live-card {
+  position: fixed; inset: 0; z-index: 95;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: radial-gradient(120% 120% at 50% 20%, #a11d26 0%, #5f1015 60%, #3d0a0e 100%);
+  color: #fff; text-align: center; padding: 24px;
+}
+.cu-live-card-pill {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.55); border-radius: 999px; padding: 5px 14px;
+  font-weight: 700; letter-spacing: 0.04em; font-size: 0.95rem;
+}
+.cu-live-card-thanks { font-size: clamp(1.3rem, 3.5vw, 2rem); font-weight: 700; }
+.cu-live-card-domain {
+  font-size: clamp(1.7rem, 6vw, 3.4rem); font-weight: 900; letter-spacing: 0.02em; line-height: 1.1;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.45);
+}
+.cu-live-card-tagline { font-size: clamp(1rem, 2.4vw, 1.35rem); opacity: 0.92; }
+.cu-live-card-brand { position: absolute; bottom: 26px; font-size: 0.95rem; letter-spacing: 0.28em; opacity: 0.75; text-transform: uppercase; }
+
+.cu-video-preview {
+  width: 100%;
+  max-height: 320px;
+  border-radius: 8px;
+  background: #000;
+  margin-top: 8px;
+}
+
+.cu-video-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.cu-video-label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.cu-video-mic {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cu-video-mic input {
+  width: 18px;
+  height: 18px;
+  accent-color: #d4a017;
+}
+
+.cu-muted {
+  opacity: 0.65;
+}
+
+/* ---------- profile ---------- */
+.cu-profile-modal {
+  max-width: 400px;
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.cu-profile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cu-profile-head h2 {
+  margin: 0;
+}
+
+.cu-profile-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.cu-profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.cu-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cu-profile-modal .cu-field {
+  margin-bottom: 10px;
+}
+
+.cu-profile-readonly {
+  font-size: 0.85rem;
+  margin: 10px 0;
+  display: grid;
+  gap: 4px;
+}
+
+.cu-profile-save {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.cu-input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--ink);
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.cu-ok {
+  color: #69db7c;
+  font-size: 0.85rem;
+  margin: 6px 0;
+}
+
+.cu-link {
+  background: none;
+  border: none;
+  color: var(--accent-2);
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* ---------- legal pages (terms / privacy) ---------- */
+.cu-legal-page {
+  min-height: 100dvh;
+  padding: 28px 16px 56px;
+  display: flex;
+  justify-content: center;
+}
+
+.cu-legal {
+  max-width: 760px;
+  width: 100%;
+}
+
+.cu-legal h1 {
+  font-size: 1.7rem;
+  margin: 20px 0 6px;
+}
+
+.cu-legal h2 {
+  font-size: 1.05rem;
+  margin: 26px 0 8px;
+  color: var(--accent);
+}
+
+.cu-legal p {
+  line-height: 1.75;
+  margin: 0 0 12px;
+}
+
+.cu-legal-updated {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.cu-legal-foot {
+  margin-top: 36px;
+}
+
+.cu-drawer-legal {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.cu-drawer-legal a {
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+.cu-puzzle-history {
+  margin-top: 28px;
+}
+
+.cu-history-section-title {
+  font-size: 1rem;
+  margin: 0 0 10px;
+}
+
+/* ---------- rating / leaderboard ---------- */
+.cu-rating-chip {
+  background: rgba(255, 212, 59, 0.14);
+  border: 1px solid rgba(255, 212, 59, 0.45);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cu-spark {
+  margin: 12px 0 4px;
+}
+
+.cu-spark-svg {
+  width: 100%;
+  height: 60px;
+  display: block;
+}
+
+.cu-lb-me {
+  background: rgba(255, 212, 59, 0.07);
+  border: 1px solid rgba(255, 212, 59, 0.35);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+
+.cu-lb-me .cu-progress {
+  margin: 8px 0;
+}
+
+.cu-history-item.cu-lb-me-row {
+  border-color: rgba(255, 212, 59, 0.55);
+}
+
+/* ---------- leaderboard tabs + stats ---------- */
+.cu-lb-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cu-lb-tabs button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cu-lb-tabs button.active {
+  border-color: var(--accent);
+  background: var(--panel);
+}
+
+.cu-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.cu-stat-card {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.cu-stat-card .num {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.cu-stat-card .lbl {
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.cu-stat-card .sub {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.cu-stat-subject {
+  margin-bottom: 8px;
+}
+
+.cu-chart {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  height: 170px;
+  padding: 10px 2px 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+}
+
+.cu-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.cu-bar-val {
+  font-size: 0.62rem;
+  height: 14px;
+  line-height: 14px;
+}
+
+.cu-bar {
+  width: 70%;
+  max-width: 30px;
+  min-height: 2px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+}
+
+.cu-bar-label {
+  font-size: 0.6rem;
+  opacity: 0.6;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+/* Header user chip */
+.cu-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+/* Facebook-style account button + dropdown menu */
+.cu-account-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 4px 8px 4px 4px;
+  border-radius: 999px;
+  font: inherit;
+}
+
+.cu-account-btn:hover {
+  background: var(--panel-2);
+}
+
+.cu-account-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.cu-account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cu-account-avatar.large {
+  width: 48px;
+  height: 48px;
+  font-size: 1.6rem;
+}
+
+/* Level-progress ring around the header avatar. */
+.cu-level-ring {
+  --p: 0;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  padding: 2.5px;
+  flex-shrink: 0;
+  display: inline-flex;
+  background: conic-gradient(
+    #ffd43b calc(var(--p) * 1turn),
+    rgba(255, 255, 255, 0.14) 0
+  );
+  transition: background 0.4s ease;
+}
+
+.cu-level-ring .cu-account-avatar {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.cu-account-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cu-caret {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.cu-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.cu-account-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 95;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 230px;
+  padding: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  display: grid;
+  gap: 2px;
+}
+
+.cu-account-menu-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.cu-account-menu-id {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cu-account-menu-id strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cu-account-menu-id .cu-muted {
+  font-size: 0.78rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cu-account-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cu-account-menu-item:hover {
+  background: var(--panel-2);
+}
+
+/* Collapsible settings block inside the account/gear menu */
+.cu-account-menu-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  margin: 2px 0 6px;
+  border-top: 1px solid var(--line, #eee);
+  border-bottom: 1px solid var(--line, #eee);
+}
+.cu-account-menu-settings .cu-lang {
+  display: flex;
+  gap: 6px;
+}
+.cu-account-menu-settings .cu-check-toggle {
+  font-size: 0.85rem;
+}
+
+/* Change-password section inside the profile modal */
+.cu-profile-pw {
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.cu-profile-pw h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.cu-user-email {
+  font-size: 0.85rem;
+  color: var(--muted);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cu-btn.small {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.cu-btn.danger {
+  color: var(--danger);
+}
+
+.cu-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- social login buttons ---------- */
+.cu-oauth {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.cu-oauth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  font-weight: 600;
+}
+
+.cu-oauth-btn svg {
+  flex-shrink: 0;
+}
+
+.cu-or {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 10px 0;
+}
+
+.cu-or::before,
+.cu-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ---------- slide-in menu drawer ---------- */
+.cu-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+.cu-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.cu-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  animation: drawer-in 0.22s ease;
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.cu-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.05rem;
+}
+
+.cu-drawer-body {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cu-drawer-body section h2 {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.cu-drawer-body .cu-field {
+  margin-bottom: 12px;
+}
+
+.cu-drawer-body .cu-select {
+  width: 100%;
+  max-width: none;
+}
+
+/* History */
+.cu-history {
+  width: 100%;
+  max-width: 560px;
+}
+
+.cu-stats-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cu-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cu-history-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.cu-history-icon {
+  font-size: 1.3rem;
+}
+
+.cu-history-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cu-history-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Toast */
+.cu-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  z-index: 90;
+  font-size: 0.9rem;
+}
+
+.cu-toast-hint {
+  border-color: #ffd43b;
+  box-shadow: 0 0 18px rgba(255, 212, 59, 0.35);
+  font-weight: 600;
+}
+
+/* Hint thinking indicator: gold pill floating over the board. */
+.cu-hint-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.cu-hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #ffd43b;
+  color: #ffe9a8;
+  font-weight: 600;
+  font-size: 0.92rem;
+  background: linear-gradient(100deg, #2a2118 30%, #54401c 50%, #2a2118 70%);
+  background-size: 200% 100%;
+  animation: think-shimmer 1.6s linear infinite;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+}
+
+.cu-spinner-gold {
+  border-color: rgba(255, 212, 59, 0.25);
+  border-top-color: #ffd43b;
+}
+
+/* ---------------- Thư viện bí kíp ---------------- */
+.cu-lib-home {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 2px 24px;
+}
+
+.cu-lib-hero h2 {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+}
+
+.cu-lib-hero p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.cu-lib-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.cu-lib-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.cu-lib-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffd43b, #fab005);
+  transition: width 0.4s ease;
+}
+
+.cu-lib-chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cu-lib-chapter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.cu-lib-chapter:not(:disabled):hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-2);
+}
+
+.cu-lib-chapter.is-done {
+  border-color: rgba(255, 212, 59, 0.5);
+}
+
+.cu-lib-chapter.is-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cu-lib-cicon {
+  font-size: 1.7rem;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+}
+
+.cu-lib-cbody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cu-lib-ctitle {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.cu-lib-ctitle em {
+  font-style: normal;
+  color: #ffd43b;
+}
+
+.cu-lib-csub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.cu-lib-cmeta {
+  font-size: 0.78rem;
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
+.cu-lib-lgo {
+  font-size: 1.4rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.cu-lib-back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--accent-2);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.cu-lib-chead {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.cu-lib-chead h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.cu-lib-chead p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.cu-lib-lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cu-lib-lesson {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.cu-lib-lesson:not(:disabled):hover {
+  border-color: var(--accent-2);
+}
+
+.cu-lib-lesson.is-done {
+  border-color: rgba(47, 158, 68, 0.55);
+}
+
+.cu-lib-lesson.is-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cu-lib-lnum {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.cu-lib-ltitle {
+  flex: 1;
+  font-weight: 600;
+}
+
+/* Lesson player */
+.cu-lib-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cu-lib-stepcount {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.cu-lib-lesson-title {
+  margin: 2px 0 0;
+  font-size: 1.05rem;
+}
+
+.cu-lib-card {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+.cu-lib-card p {
+  margin: 0;
+}
+
+.cu-lib-card.is-quiz {
+  border-color: #ffd43b;
+  box-shadow: 0 0 14px rgba(255, 212, 59, 0.18);
+}
+
+.cu-lib-card.is-explore {
+  border-color: var(--accent-2);
+}
+
+.cu-lib-card.is-outro {
+  border-color: rgba(47, 158, 68, 0.5);
+}
+
+.cu-lib-wrong {
+  margin-top: 8px !important;
+  color: #ff8787;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.cu-lib-controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cu-lib-controls button {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cu-lib-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cu-lib-primary {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #fff !important;
+  flex: 1;
+}
+
+.cu-lib-quizbadge {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  color: #ffd43b;
+  font-size: 0.92rem;
+}
+
+.cu-lib-moves {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cu-lib-chip {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cu-lib-chip.is-past {
+  color: var(--text);
+  border-color: var(--accent-2);
+}
+
+.cu-lib-chip.is-cur {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.cu-lib-complete {
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.cu-lib-celebrate {
+  margin-top: 12px;
+  text-align: center;
+  padding: 16px 12px;
+  border-radius: 14px;
+  background: var(--panel-2);
+  border: 1px solid rgba(255, 212, 59, 0.5);
+}
+
+.cu-lib-celebrate-emoji {
+  font-size: 2.4rem;
+  animation: lib-bounce 0.9s ease infinite alternate;
+}
+
+@keyframes lib-bounce {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-8px) scale(1.08);
+  }
+}
+
+.cu-lib-celebrate p {
+  margin: 8px 0 12px;
+  color: var(--muted);
+}
+
+.cu-lib-celebrate .cu-lib-controls {
+  justify-content: center;
+}
+
+/* ---------- multiplayer rooms ---------- */
+.cu-room-home {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 2px 24px;
+}
+
+.cu-room-home h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.cu-room-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel-2);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Signup funnel: guest teaser + room invite card */
+.cu-guest-teaser {
+  border: 1px dashed var(--accent, #d4a017);
+  border-radius: 12px;
+  background: rgba(212, 160, 23, 0.08);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  align-items: center;
+}
+.cu-guest-teaser p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+.cu-guest-teaser-stats {
+  font-weight: 600;
+}
+.cu-invite-card {
+  text-align: center;
+  align-items: center;
+  border-color: var(--accent, #d4a017);
+}
+.cu-invite-emoji {
+  font-size: 2.2rem;
+}
+.cu-invite-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.cu-invite-room {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Onboarding quests */
+.cu-quest-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel-2);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.cu-quest-card h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+.cu-quest-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cu-quest-card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+.cu-quest-card li.cu-quest-done .cu-quest-label {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.cu-quest-icon {
+  font-size: 1.1rem;
+}
+.cu-quest-label {
+  flex: 1;
+}
+.cu-quest-reward {
+  color: var(--accent, #d4a017);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.cu-quest-claimed {
+  color: #51cf66;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.cu-quest-pending {
+  color: var(--muted);
+}
+.cu-quest-toast {
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent, #d4a017);
+}
+.cu-toast-welcome {
+  border-color: var(--accent, #d4a017);
+  font-weight: 700;
+}
+
+/* Viral sharing */
+.cu-share-row {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+.cu-share-row .cu-btn {
+  flex: 1;
+}
+.cu-referral {
+  border: 1px dashed var(--accent, #d4a017);
+  border-radius: 12px;
+  background: rgba(212, 160, 23, 0.08);
+  padding: 12px 14px;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cu-referral h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+.cu-referral p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+.cu-referral-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cu-referral-code {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--accent, #d4a017);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.cu-form-error {
+  color: #ff8787;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.cu-room-code-input {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+
+.cu-room-list-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.cu-room-list-btn:hover {
+  border-color: rgba(255, 212, 59, 0.55);
+}
+
+.cu-room-lobby-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cu-room-lobby-head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Room rules (nội quy) — leader-written, shown to members & invitees. */
+.cu-room-rules-card {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cu-room-rules-input {
+  width: 100%;
+  min-height: 84px;
+  resize: vertical;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--ink);
+  padding: 8px 10px;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.cu-room-rules-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cu-invite-rules {
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 420px;
+}
+
+.cu-room-code-card {
+  border: 1px solid rgba(255, 212, 59, 0.45);
+  background: rgba(255, 212, 59, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cu-room-code-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cu-room-code {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+}
+
+.cu-room-code-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.cu-room-copied {
+  color: #8ce99a;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.cu-room-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.cu-room-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cu-room-order-btns {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.cu-room-danger {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+/* Live match */
+.cu-room-board-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Room match board uses the same aspect-locked fit as every other board view:
+   it takes the remaining column height on desktop and goes full-width on mobile. */
+.cu-board-fit.cu-room-board-fit {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  aspect-ratio: 600 / 664;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+}
+
+.cu-room-vs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cu-room-vs-mid {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.cu-room-turn {
+  color: #ffd43b;
+}
+
+.cu-room-turn-label {
+  font-weight: 800;
+  color: #ffd43b;
+  animation: cu-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes cu-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.cu-room-result {
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 212, 59, 0.55);
+  background: rgba(255, 212, 59, 0.12);
+}
+
+.cu-room-match-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 34px;
+}
+
+.cu-room-side {
+  gap: 12px;
+}
+
+/* Every aside section keeps its natural height; the aside scrolls as a
+   whole instead of flex-shrinking a section to zero. */
+.cu-room-side > * {
+  flex-shrink: 0;
+}
+
+.cu-room-moves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.cu-room-move-chip {
+  font-size: 0.78rem;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+/* Comments */
+.cu-room-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  /* Stacked aside sections (voice, room chat, comments) keep their natural
+     height — the aside itself scrolls. flex:1 here (from the single-section
+     era) compressed each box below its content in the height-locked column
+     and the sections painted over each other. */
+  flex: none;
+}
+
+.cu-room-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  min-height: 120px;
+  max-height: 320px;
+  padding: 4px 2px;
+}
+
+.cu-room-comment {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.cu-room-comment-body {
+  flex: 1;
+  min-width: 0;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.cu-room-comment-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+
+.cu-room-comment-head strong {
+  font-size: 0.85rem;
+}
+
+.cu-room-move-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffd43b;
+  background: rgba(255, 212, 59, 0.12);
+  border-radius: 6px;
+  padding: 1px 6px;
+}
+
+.cu-room-comment-time {
+  color: var(--muted);
+  margin-left: auto;
+}
+
+.cu-room-comment-body p {
+  margin: 0;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.cu-room-comment-input {
+  display: flex;
+  gap: 8px;
+}
+
+.cu-room-comment-input input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.cu-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cu-check input {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  accent-color: #ffd43b;
+}
+
+.cu-check-hint {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.cu-room-tournament-create {
+  display: flex;
+  gap: 8px;
+}
+
+.cu-room-tournament-create input {
+  flex: 1;
+  min-width: 0;
+}
+
+.cu-room-tournament-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cu-room-tournament-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cu-room-standings {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.cu-room-standings td {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cu-room-standings tr:first-child td:first-child {
+  font-size: 1.1rem;
+}
+
+.cu-num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cu-room-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cu-room-xp-toast {
+  font-weight: 800;
+  color: #8ce99a;
+  background: rgba(140, 233, 154, 0.12);
+  border: 1px solid rgba(140, 233, 154, 0.5);
+  border-radius: 10px;
+  padding: 6px 14px;
+  animation: cu-pulse 1.6s ease-in-out infinite;
+}
+
+/* Shared pagination for all data lists. */
+.cu-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 12px 0 4px;
+}
+
+.cu-pagination button {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cu-pagination button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cu-pagination-info {
+  min-width: 64px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* Community puzzles */
+.cu-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  color: var(--gold, #d4af37);
+  white-space: nowrap;
+}
+.cu-community-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+}
+.cu-community-title {
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cu-community-actions {
+  display: flex;
+  gap: 6px;
+}
+.cu-community-list {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px 24px;
+}
+.cu-community-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cu-community-sorts {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cu-community-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cu-community-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.cu-community-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--muted, #888);
+  flex-wrap: wrap;
+}
+
+/* Setup: intent segmented control (play vs create) */
+.cu-seg {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.cu-seg button {
+  flex: 1;
+  padding: 9px 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cu-seg button.active {
+  border-color: var(--gold, #d4af37);
+  background: rgba(212, 175, 55, 0.14);
+}
+
+/* Sample puzzle library picker */
+.cu-lib-modal {
+  max-width: 420px;
+  width: calc(100vw - 48px);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.cu-lib-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cu-lib-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+  font-size: 0.9rem;
+}
+
+.cu-lib-section {
+  margin: 14px 0 4px;
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Move-animation effects — pure CSS (reliable on iOS; no SMIL).       */
+/* Applied to SVG <g>/<line>/<circle>; restarted via React key change. */
+/* ------------------------------------------------------------------ */
+
+/* Piece glide from origin to destination. --gx/--gy = start offset px. */
+@keyframes cu-glide {
+  from { transform: translate(var(--gx), var(--gy)) scale(1.12); }
+  to { transform: translate(0px, 0px) scale(1); }
+}
+.cu-glide {
+  /* easeOutQuint-ish: buttery deceleration, no abrupt stop */
+  animation: cu-glide var(--gd, 0.9s) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform;
+  /* Scale must happen around the piece's own center, not the SVG origin (0,0),
+     otherwise the start position is displaced. */
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Turquoise trail line: holds, then fades. */
+@keyframes cu-trail {
+  0% { opacity: 0.85; stroke-width: 16px; }
+  80% { opacity: 0.85; stroke-width: 16px; }
+  100% { opacity: 0; stroke-width: 6px; }
+}
+.cu-trail {
+  animation: cu-trail var(--td, 1s) ease-out forwards;
+}
+
+/* Turquoise halo traveling with the piece. */
+@keyframes cu-halo {
+  0% { opacity: 0.5; }
+  80% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+.cu-halo {
+  animation: cu-halo var(--td, 1s) ease-out forwards;
+}
+
+/* Expanding turquoise ring at the origin square. Drawn at r=50, scaled. */
+@keyframes cu-ring {
+  0% { opacity: 1; transform: scale(0.44); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.cu-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cu-ring var(--td, 1s) ease-out forwards;
+}
+
+/* Gold landing ripple at the destination. Drawn at r=46, scaled. */
+@keyframes cu-ripple {
+  from { opacity: 0.9; transform: scale(0.65); }
+  to { opacity: 0; transform: scale(1); }
+}
+.cu-ripple {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cu-ripple 0.35s ease-out 0.3s forwards;
+}
+
+/* Capture clash: spikes fly outward. --sx/--sy = direction px. */
+@keyframes cu-spike {
+  from { opacity: 1; transform: translate(0px, 0px); stroke-width: 7px; }
+  to { opacity: 0; transform: translate(var(--sx), var(--sy)); stroke-width: 1px; }
+}
+.cu-spike {
+  opacity: 0;
+  animation: cu-spike 0.4s ease-out 0.3s forwards;
+}
+
+/* Capture clash: expanding gold circles. */
+@keyframes cu-blast {
+  from { opacity: 0.95; transform: scale(0.27); }
+  to { opacity: 0; transform: scale(1); }
+}
+.cu-blast {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cu-blast 0.4s ease-out 0.3s forwards;
+}
+
+/* Captured piece sent flying. --fx/--fy = fling vector px. */
+@keyframes cu-fly {
+  0% { opacity: 1; transform: translate(0px, 0px) rotate(0deg); }
+  55% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(160deg); }
+}
+.cu-fly {
+  opacity: 0;
+  animation: cu-fly 0.65s ease-out 0.3s forwards;
+}
+
+/* Replay ("Xem lại") checkmate banner: fades in and stays while on the final position. */
+@keyframes cu-mate-stay {
+  0% { opacity: 0; transform: scale(0.6); }
+  18% { opacity: 1; transform: scale(1.1); }
+  30% { transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.cu-check-banner.cu-mate-stay {
+  animation: cu-mate-stay 0.6s ease forwards;
+}
+
+/* Blog pages */
+.cu-blog-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+  color: #f3e9d2;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  min-height: 100dvh;
+  background: #1d1408;
+}
+.cu-blog-header h1 {
+  font-size: 1.7rem;
+  line-height: 1.3;
+  margin: 12px 0 8px;
+  color: #ffd97a;
+}
+.cu-blog-header p {
+  color: #cbb98f;
+  line-height: 1.6;
+}
+.cu-blog-home, .cu-blog-page a {
+  color: #7fd4c1;
+}
+.cu-blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+.cu-blog-card {
+  display: block;
+  background: #2b1f0e;
+  border: 1px solid #4a3a1e;
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-decoration: none;
+}
+.cu-blog-card:hover {
+  border-color: #7fd4c1;
+}
+.cu-blog-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  color: #ffe9b8;
+}
+.cu-blog-card p {
+  margin: 0 0 10px;
+  color: #cbb98f;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+.cu-blog-meta {
+  font-size: 0.85rem;
+  color: #9a8a68;
+  display: flex;
+  gap: 8px;
+}
+.cu-blog-article {
+  margin-top: 20px;
+  line-height: 1.75;
+  font-size: 1.02rem;
+}
+.cu-blog-article h2 {
+  color: #ffd97a;
+  margin: 32px 0 12px;
+  font-size: 1.35rem;
+}
+.cu-blog-article h3 {
+  color: #ffe9b8;
+  margin: 24px 0 8px;
+  font-size: 1.1rem;
+}
+.cu-blog-article p { margin: 12px 0; }
+.cu-blog-article ul { margin: 12px 0; padding-left: 24px; }
+.cu-blog-article li { margin: 6px 0; }
+.cu-blog-article blockquote {
+  border-left: 3px solid #7fd4c1;
+  margin: 16px 0;
+  padding: 8px 16px;
+  background: #241a0c;
+  border-radius: 0 8px 8px 0;
+  color: #d8c9a3;
+}
+.cu-blog-article code {
+  background: #3a2c14;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.cu-blog-article pre {
+  background: #241a0c;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.cu-blog-article pre code { background: none; padding: 0; }
+.cu-blog-cta {
+  margin-top: 48px;
+  text-align: center;
+  background: #2b1f0e;
+  border: 1px solid #4a3a1e;
+  border-radius: 12px;
+  padding: 28px 20px;
+}
+.cu-blog-cta p { margin: 0 0 16px; font-size: 1.1rem; }
+.cu-blog-cta-btn {
+  display: inline-block;
+  background: #b3312a;
+  color: #fff !important;
+  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+.cu-blog-cta-btn:hover { background: #c94035; }
+
+/* Blog link in drawer */
+.cu-blog-drawer-link {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: #2b1f0e;
+  border: 1px solid #4a3a1e;
+  color: #ffe9b8 !important;
+  text-decoration: none;
+  font-weight: 600;
+}
+.cu-blog-drawer-link:hover { border-color: #7fd4c1; }
+
+/* Ambassador stats line in profile */
+.cu-ambassador-line {
+  background: #2b1f0e;
+  border: 1px solid #8a6d2f;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  color: #ffd97a;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Signup nudge at emotional peaks (victory, puzzle solved) */
+.cu-signup-nudge {
+  background: linear-gradient(135deg, #3a2a10, #2b1f0e);
+  border: 2px solid #d4a017;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  box-shadow: 0 4px 24px rgba(212, 160, 23, 0.25);
+}
+.cu-signup-nudge-text strong {
+  font-size: 1.15rem;
+  color: #ffd97a;
+}
+.cu-signup-nudge-text p {
+  margin: 8px 0 0;
+  color: #e8d9b5;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+.cu-signup-nudge-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.cu-signup-nudge-actions .cu-btn-primary {
+  background: #b3312a;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Referral welcome banner for guests arriving via ?ref= */
+.cu-ref-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #2b3a10;
+  border-bottom: 2px solid #8ab817;
+  padding: 10px 16px;
+  color: #e8f5c5;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+.cu-ref-banner span { flex: 1; }
+.cu-ref-banner .cu-btn.small { white-space: nowrap; }
+.cu-ref-banner .cu-btn-icon {
+  background: none;
+  border: none;
+  color: #b8cc8a;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* Live eval bar: vertical beside the board on desktop, thin horizontal
+   above the board on phones (never shrinks the board on mobile). */
+.cu-board-with-eval {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  max-width: 100%;
+}
+.cu-evalbar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+.cu-evalbar {
+  position: relative;
+  flex: 1;
+  width: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #161616; /* top side = black */
+  border: 1px solid #3a3a3a;
+}
+.cu-evalbar.flipped {
+  background: #5c1a12; /* top side = red */
+}
+.cu-evalbar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--fill);
+  background: linear-gradient(to top, #b03024, #e8604c); /* bottom = red */
+  transition: height 0.5s ease;
+}
+.cu-evalbar.flipped .cu-evalbar-fill {
+  background: linear-gradient(to top, #000, #3d3d3d); /* bottom = black */
+}
+.cu-evalbar-label {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #9a9a9a;
+  margin-top: 5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Brilliant-move celebration banner over the board.
+   Sits in the lower third so it never overlaps the centered check banner. */
+.cu-brilliant-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20%;
+  pointer-events: none;
+  z-index: 6;
+}
+.cu-brilliant-banner span {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffd700;
+  text-shadow:
+    0 0 22px rgba(255, 215, 0, 0.95),
+    0 2px 6px #000;
+  animation: brilliant-pop 2.3s ease forwards;
+  white-space: nowrap;
+}
+@keyframes brilliant-pop {
+  0% { opacity: 0; transform: scale(0.5); }
+  15% { opacity: 1; transform: scale(1.18); }
+  30% { transform: scale(1); }
+  78% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.06) translateY(-14px); }
+}
+
+@media (max-width: 920px) {
+  .cu-board-with-eval {
+    flex-direction: column;
+    height: auto;
+    align-items: stretch;
+  }
+  .cu-evalbar-wrap {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto 4px;
+    padding: 0 2px;
+  }
+  .cu-evalbar {
+    flex: 1;
+    width: auto;
+    height: 10px;
+  }
+  .cu-evalbar-fill {
+    top: 0;
+    bottom: auto;
+    height: 100%;
+    width: var(--fill);
+    transition: width 0.5s ease;
+  }
+  .cu-evalbar-label {
+    margin-top: 0;
+    min-width: 44px;
+    text-align: right;
+  }
+  .cu-brilliant-banner span {
+    font-size: 1.5rem;
+  }
+}
+
+/* Checkmate drama: stronger board shake + gold flash. */
+.cu-board-fit.shake-big {
+  animation: board-shake-big 0.7s ease;
+}
+@keyframes board-shake-big {
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-10px, 4px) rotate(-0.6deg); }
+  30% { transform: translate(9px, -5px) rotate(0.5deg); }
+  45% { transform: translate(-7px, 3px) rotate(-0.4deg); }
+  60% { transform: translate(6px, -3px) rotate(0.3deg); }
+  75% { transform: translate(-4px, 2px); }
+}
+.cu-mate-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.55) 0%,
+    rgba(255, 215, 0, 0) 70%
+  );
+  animation: mate-flash 1.2s ease forwards;
+}
+@keyframes mate-flash {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Match reactions: floating emoji over the board + reaction bar. */
+.cu-reaction-float {
+  position: absolute;
+  bottom: 12%;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 7;
+  animation: reaction-float 2.2s ease-out forwards;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+@keyframes reaction-float {
+  0% { opacity: 0; transform: translateY(10px) scale(0.6); }
+  15% { opacity: 1; transform: translateY(0) scale(1.2); }
+  30% { transform: translateY(-8px) scale(1); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-90px) scale(0.9); }
+}
+.cu-reaction-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid #3a3a3a;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.cu-reaction-btn {
+  background: none;
+  border: none;
+  font-size: 1.35rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 8px;
+  transition: transform 0.12s ease;
+  line-height: 1;
+}
+.cu-reaction-btn:hover { transform: scale(1.25); }
+.cu-reaction-btn:active { transform: scale(0.9); }
+
+/* Friends: list, online dots, challenges. */
+.cu-friends {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 12px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cu-friends h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.cu-friends h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.cu-online-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #5a5348;
+  margin-right: 6px;
+  vertical-align: baseline;
+}
+.cu-online-dot.on {
+  background: #40c057;
+  box-shadow: 0 0 6px rgba(64, 192, 87, 0.8);
+}
+.cu-challenge-item {
+  border: 1px solid var(--accent);
+}
+.cu-challenge-highlight {
+  animation: cu-challenge-flash 1s ease-in-out 3;
+  border-color: #ffd54a;
+  box-shadow: 0 0 12px rgba(255, 213, 74, 0.6);
+}
+@keyframes cu-challenge-flash {
+  0%, 100% { background: transparent; }
+  50% { background: rgba(255, 213, 74, 0.25); }
+}
+.cu-challenge-modal {
+  text-align: center;
+}
+.cu-challenge-modal h3 {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+}
+.cu-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.cu-friend-on {
+  color: #40c057;
+  border-color: #40c057;
+}
+
+/* PWA install helper. */
+.cu-install-modal {
+  text-align: left;
+  max-width: 340px;
+}
+.cu-install-modal h3 {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+  text-align: center;
+}
+.cu-install-steps {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* Big check-banner setting toggle in the drawer. */
+.cu-check-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.cu-check-toggle input {
+  margin-top: 3px;
+  accent-color: #0d9488;
+}
+
+/* Push notification nudge card. */
+.cu-push-nudge {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  z-index: 90;
+  background: rgba(20, 28, 32, 0.97);
+  border: 1px solid #0d9488;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  color: #fff;
+}
+.cu-push-nudge-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cu-push-nudge-text {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+.cu-push-nudge-row {
+  display: flex;
+  gap: 8px;
+}
+.cu-push-hint {
+  font-size: 0.88rem;
+  opacity: 0.75;
+  margin: 0 0 8px;
+}
+
+/* Puzzle Rush */
+.cu-rush-enter {
+  display: flex;
+  justify-content: center;
+  padding: 8px 12px 0;
+}
+.cu-btn-rush {
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-color: #f59e0b;
+}
+.cu-rush-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.cu-rush-timer {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.cu-rush-low {
+  color: #f87171;
+  animation: cu-pulse 1s infinite;
+}
+@keyframes cu-pulse {
+  50% { opacity: 0.5; }
+}
+.cu-rush-score {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fbbf24;
+}
+.cu-rush-lives {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+.cu-rush-best {
+  margin-top: 8px;
+  font-weight: 700;
+  color: #fbbf24;
+  text-align: center;
+}
+
+/* Spectate mode */
+.cu-room-spectate-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(13, 148, 136, 0.15);
+  border: 1px solid #0d9488;
+  font-size: 0.88rem;
+  color: #5eead4;
+}
+
+/* Correspondence */
+.cu-corr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.cu-corr-card {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: inherit;
+  cursor: pointer;
+}
+.cu-corr-card.cu-corr-turn {
+  border-color: #0d9488;
+  background: rgba(13, 148, 136, 0.08);
+}
+.cu-corr-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.cu-corr-opp {
+  font-weight: 700;
+}
+.cu-corr-badge-turn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5eead4;
+}
+.cu-corr-badge-wait {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+.cu-corr-badge-done {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.cu-corr-meta {
+  font-size: 0.82rem;
+  opacity: 0.65;
+  margin-top: 4px;
+}
+.cu-corr-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+.cu-corr-pick h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Guest spectate -------------------------------------------------------- */
+.cu-guest-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: rgba(255, 200, 60, 0.12);
+  border: 1px solid rgba(255, 200, 60, 0.4);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+.cu-room-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cu-room-card-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+/* retrigger guest-rooms 2026-10-12 */
+
+/* Daily check-in -------------------------------------------------------- */
+.cu-checkin-week {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.cu-checkin-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 44px;
+  padding: 8px 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-2);
+}
+.cu-checkin-day.done {
+  border-color: rgba(255, 200, 60, 0.6);
+  background: rgba(255, 200, 60, 0.1);
+}
+.cu-checkin-dow {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+.cu-checkin-mark {
+  font-size: 1.2rem;
+}
+
+/* Computer-vs-computer spectator view */
+.cu-cvc-moves {
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cu-cvc-move-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 1fr;
+  gap: 8px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+}
+.cu-cvc-move-row:last-child {
+  background: rgba(245, 197, 66, 0.16);
+  font-weight: 600;
+}
+.cu-cvc-move-no {
+  opacity: 0.6;
+}
+.cu-cvc-result {
+  font-weight: 700;
+  font-size: 1.05rem;
+}

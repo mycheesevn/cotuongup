@@ -269,6 +269,7 @@ export const PRIVACY: Record<Lang, LegalDoc> = {
           "Supabase hosts our database and authentication — your account and game data are stored on Supabase infrastructure.",
           "Google and Facebook are used solely as sign-in providers; we receive only the basic profile data needed to create your account.",
           "Vercel hosts this website and may process standard technical logs (such as IP addresses) to deliver the pages.",
+          "Google Analytics helps us understand where visitors come from and how the site is used, so we can improve it; it sets analytics cookies (such as _ga). We do not use advertising cookies, and analytics data is not sold.",
         ],
       },
       {
@@ -332,6 +333,7 @@ export const PRIVACY: Record<Lang, LegalDoc> = {
           "Supabase lưu trữ cơ sở dữ liệu và hệ thống xác thực — tài khoản và dữ liệu ván cờ của bạn được lưu trên hạ tầng của Supabase.",
           "Google và Facebook chỉ được dùng làm nhà cung cấp đăng nhập; chúng tôi chỉ nhận thông tin hồ sơ cơ bản cần thiết để tạo tài khoản cho bạn.",
           "Vercel lưu trữ website này và có thể xử lý các nhật ký kỹ thuật tiêu chuẩn (như địa chỉ IP) để phân phối trang web.",
+          "Google Analytics giúp chúng tôi hiểu khách truy cập đến từ đâu và cách họ sử dụng trang web để cải thiện dịch vụ; công cụ này đặt cookie phân tích (như _ga). Chúng tôi không dùng cookie quảng cáo và không bán dữ liệu phân tích.",
         ],
       },
       {

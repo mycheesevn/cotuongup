@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
+import { PageViewTracker } from "@/components/PageViewTracker";
 import { ICON_VERSION } from "@/lib/jieqi/iconSvg";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 const SITE_URL = "https://cotuongup.synerworlds.com";
 const TITLE = "Cờ Úp — Cờ tướng úp | Dark Xiangqi (Jieqi)";
@@ -152,21 +156,31 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* Google tag (gtag.js) — Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-YPKKP13PBY"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-YPKKP13PBY');
-          `}
-        </Script>
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </head>
-      <body>{children}</body>
+      <body>
+        {GA_ID && (
+          <Suspense fallback={null}>
+            <PageViewTracker gaId={GA_ID} />
+          </Suspense>
+        )}
+        {children}
+      </body>
     </html>
   );
 }

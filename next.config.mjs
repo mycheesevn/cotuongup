@@ -2,6 +2,14 @@
 const nextConfig = {
   async redirects() {
     return [
+      // Any *.vercel.app host permanently redirects to the canonical
+      // host, preserving path + query (old links keep working).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: ".*\\.vercel\\.app" }],
+        destination: "https://cotuongup.synerworlds.com/:path*",
+        permanent: true,
+      },
       // The blog lives on the SynerWorlds hub — permanent (308) redirects,
       // mirroring checkers/caro. No Cờ Úp guide exists on the hub yet, so
       // every local blog URL lands on the Cờ Úp category list (which

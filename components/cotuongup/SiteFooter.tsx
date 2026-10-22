@@ -8,6 +8,7 @@
  */
 
 import HandoffLink from "./HandoffLink";
+import FooterGames from "./FooterGames";
 
 const GAMES: Array<{ vi: string; en: string; url: string }> = [
   { vi: "Cờ tướng", en: "Xiangqi", url: "https://cotuong.synerworlds.com" },
@@ -70,15 +71,7 @@ export default function SiteFooter({
         </HandoffLink>
       </div>
       <div>
-        {GAMES.map((g, i) => (
-          <span key={g.url}>
-            {i > 0 ? ", " : ""}
-            <HandoffLink href={g.url} newTab style={linkStyle}>
-              {en ? g.en : g.vi}
-            </HandoffLink>
-          </span>
-        ))}
-        <span>,...</span>
+        <FooterGames lang={lang} fallback={GAMES} linkStyle={linkStyle} />
       </div>
       <div>
         <HandoffLink href={`${HUB}/terms${q}`} newTab style={linkStyle}>

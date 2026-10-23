@@ -107,8 +107,9 @@ const jsonLd = {
   description: DESCRIPTION,
   url: SITE_URL,
   inLanguage: ["vi", "en"],
-  applicationCategory: "GameApplication",
-  operatingSystem: "Web",
+  isAccessibleForFree: true,
+  applicationCategory: "Game",
+  operatingSystem: "Any (web browser)",
   gamePlatform: "Web browser",
   genre: ["Board game", "Strategy", "Chess"],
   playMode: ["SinglePlayer", "MultiPlayer"],
@@ -121,6 +122,11 @@ const jsonLd = {
     "@type": "Organization",
     name: "SynerWorlds",
     url: SITE_URL,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "SynerWorlds",
+    url: "https://synerworlds.com",
   },
 };
 

@@ -25,7 +25,7 @@ import { canvasToPngFile, renderShareCard } from "@/lib/jieqi/shareCard";
 import { shareAchievement } from "@/lib/jieqi/achievementCard";
 import { shareLink, shareResultCard } from "@/lib/jieqi/share";
 import { getDailyPuzzle, puzzleState, type Puzzle } from "@/lib/jieqi/puzzles";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   playCapture,
   playCheck,
@@ -152,7 +152,7 @@ export function PuzzleMode({
     try {
       const outcome = await shareAchievement(
         "streak",
-        { title: s.achStreakTitle(streak.count), days: streak.count },
+        { title: fmt(s.achStreakTitle, { days: streak.count }), days: streak.count },
         lang
       );
       setShareToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -174,7 +174,7 @@ export function PuzzleMode({
       const canvas = renderShareCard({
         board: viewBoard(state),
         title,
-        subtitle: s.sharePuzzleSubtitle(movesUsed),
+        subtitle: fmt(s.sharePuzzleSubtitle, { moves: movesUsed }),
         footer: s.shareFooter,
       });
       const file = await canvasToPngFile(canvas, "co-up-puzzle.png");
@@ -182,7 +182,7 @@ export function PuzzleMode({
         file,
         fileName: "co-up-puzzle.png",
         title,
-        text: `${title}\n${s.sharePuzzleSubtitle(movesUsed)}`,
+        text: `${title}\n${fmt(s.sharePuzzleSubtitle, { moves: movesUsed })}`,
         url: link,
       });
       setShareToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -510,21 +510,21 @@ export function PuzzleMode({
           <h2>{custom ? custom.label : s.puzzleToday}</h2>
           {!custom && (
             <div className="cu-captured-row">
-              <span className="cu-captured-label">{s.puzzleNum(puzzle.id)}</span>
+              <span className="cu-captured-label">{fmt(s.puzzleNum, { n: puzzle.id })}</span>
               <span>{dateLabel}</span>
             </div>
           )}
           <div className="cu-captured-row">
-            <span className="cu-captured-label">{s.mateIn(puzzle.movesToMate)}</span>
+            <span className="cu-captured-label">{fmt(s.mateIn, { n: puzzle.movesToMate })}</span>
             <span className="cu-stats">
-              {s.moveCount(movesUsed, puzzle.movesToMate)}
+              {fmt(s.moveCount, { used: movesUsed, total: puzzle.movesToMate })}
             </span>
           </div>
           {!custom?.hideMeta && (
             <div className="cu-captured-row">
               <span className="cu-captured-label">{s.youAreRed}</span>
               <span className="cu-streak">
-                {streak.count > 0 ? s.streak(streak.count) : s.noStreak}
+                {streak.count > 0 ? fmt(s.streak, { n: streak.count }) : s.noStreak}
               </span>
               {streak.count >= 3 && (
                 <button
@@ -589,7 +589,7 @@ export function PuzzleMode({
                 disabled={sharingAch}
                 onClick={shareStreak}
               >
-                {s.streakShareBtn(streak.count)}
+                {fmt(s.streakShareBtn, { days: streak.count })}
               </button>
             )}
           </div>
@@ -601,7 +601,7 @@ export function PuzzleMode({
               <SignupNudge
                 lang={lang}
                 title={s.puzzleNudgeTitle}
-                text={s.puzzleNudgeText(loadGuestStats().puzzles)}
+                text={fmt(s.puzzleNudgeText, { puzzles: loadGuestStats().puzzles })}
                 onDismiss={() => setPuzzleNudge(false)}
               />
             )}

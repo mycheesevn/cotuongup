@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   memberName,
   postComment,
@@ -87,7 +87,7 @@ export function RoomComments({
                 <div className="cu-room-comment-head">
                   <strong>{memberName(c.profile, "?")}</strong>
                   <span className="cu-room-move-badge">
-                    {s.roomMoveBadge(c.move_number)}
+                    {fmt(s.roomMoveBadge, { n: c.move_number })}
                   </span>
                   <span className="cu-room-comment-time">
                     {new Date(c.created_at).toLocaleTimeString(

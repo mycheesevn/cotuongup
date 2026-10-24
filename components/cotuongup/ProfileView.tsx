@@ -9,7 +9,7 @@ import {
   uploadAvatar,
   type UserProfile,
 } from "@/lib/supabase/profile";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   displayName as dispName,
   levelForXp,
@@ -307,7 +307,7 @@ export function ProfileView({ lang, onClose }: Props) {
             {shareToast && <div className="cu-toast">{shareToast}</div>}
             {stats && stats.invites > 0 && (
               <div className="cu-ambassador-line">
-                🎁 {s.ambStats(stats.invites, stats.refXp)}
+                🎁 {fmt(s.ambStats, { invites: stats.invites, xp: stats.refXp })}
               </div>
             )}
             <ReferralCard lang={lang} />

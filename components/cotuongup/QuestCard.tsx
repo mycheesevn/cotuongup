@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { useAuth } from "@/lib/supabase/AuthContext";
 import {
   QUEST_IDS,
@@ -56,7 +56,7 @@ export function QuestCard({ lang }: { lang: Lang }) {
     try {
       const xp = await claimQuest(id);
       if (xp > 0) {
-        setToast(`🎉 ${s.roomXpEarned(xp)}`);
+        setToast(`🎉 ${fmt(s.roomXpEarned, { n: xp })}`);
         window.dispatchEvent(new CustomEvent("xq:profile-refresh"));
         window.setTimeout(() => setToast(null), 3500);
       }

@@ -15,7 +15,7 @@ import {
   puzzleState,
   type Puzzle,
 } from "@/lib/jieqi/puzzles";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   playCheck,
   playCheckmateFanfare,
@@ -248,11 +248,11 @@ export function PuzzleRush({ lang, onExit }: { lang: Lang; onExit: () => void })
     if (sharing || phase !== "over") return;
     setSharing(true);
     try {
-      const title = s.rushShareTitle(score);
+      const title = fmt(s.rushShareTitle, { score: score });
       const canvas = renderShareCard({
         board: viewBoard(board),
         title,
-        subtitle: s.rushShareSubtitle(score, best),
+        subtitle: fmt(s.rushShareSubtitle, { score: score, best: best }),
         footer: s.shareFooter,
       });
       const file = await canvasToPngFile(canvas, "rush.png");
@@ -260,7 +260,7 @@ export function PuzzleRush({ lang, onExit }: { lang: Lang; onExit: () => void })
         file,
         fileName: "rush.png",
         title,
-        text: `${title}\n${s.rushShareSubtitle(score, best)}`,
+        text: `${title}\n${fmt(s.rushShareSubtitle, { score: score, best: best })}`,
         url: await shareLink("/"),
       });
       setShareToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -309,10 +309,10 @@ export function PuzzleRush({ lang, onExit }: { lang: Lang; onExit: () => void })
         </div>
         <div className="cu-status" role="status">
           {phase === "over"
-            ? s.rushOver(score, best)
+            ? fmt(s.rushOver, { score: score, best: best })
             : phase === "reveal"
-              ? s.rushWrong()
-              : s.rushMateIn(puzzle.movesToMate)}
+              ? s.rushWrong
+              : fmt(s.rushMateIn, { n: puzzle.movesToMate })}
         </div>
         {phase === "over" && (
           <div className="cu-share-row">

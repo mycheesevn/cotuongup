@@ -3719,3 +3719,172 @@ body {
   font-weight: 700;
   font-size: 1.05rem;
 }
+/* ---------- language picker (header 🌐 button + popover/sheet) ---------- */
+/* Append BOTH blocks at the very END of app/globals.css (AGENTS.md:
+   cascade order beats media queries — the mobile override must come
+   after the base rules). Replace cu- with the game's prefix. */
+.cu-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 38px;
+  padding: 0 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cu-lang-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.cu-lang-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 95;
+  width: 300px;
+  max-width: calc(100vw - 16px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cu-lang-pop-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.cu-lang-close {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.cu-lang-search {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-2);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.cu-lang-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.cu-lang-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cu-lang-item:hover { background: var(--panel-2); }
+.cu-lang-item.active { background: var(--panel-2); font-weight: 700; }
+
+.cu-lang-tag {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.cu-lang-item.active .cu-lang-tag { color: var(--accent); }
+
+.cu-lang-empty {
+  padding: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 920px) {
+  /* Language picker becomes a bottom sheet on mobile. */
+  .cu-lang-pop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: auto;
+    max-width: none;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    max-height: 72dvh;
+  }
+
+  .cu-lang-list {
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+  }
+}
+
+/* ---------- central-i18n shell additions (appended last) ---------- */
+/* The LangPicker popover anchors to the account cluster. */
+.cu-account {
+  position: relative;
+  gap: 8px;
+}
+
+/* Brand icon: shown only on small screens (mobile header rule). */
+.cu-brand-icon {
+  display: none;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 920px) {
+  /* Mobile header rule (owner, 2026-10-24): one non-wrapping row =
+     menu + brand icon + 🌐 picker + account; the name text yields. */
+  .cu-topbar {
+    flex-wrap: nowrap;
+  }
+
+  .cu-brand-icon {
+    display: block;
+    width: 30px;
+    height: 30px;
+  }
+
+  .cu-brand .cu-title {
+    display: none;
+  }
+}

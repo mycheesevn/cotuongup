@@ -32,7 +32,7 @@ import {
   submitRoomMove,
 } from "@/lib/supabase/rooms";
 import { notifyPushTrigger } from "@/lib/push/client";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   playCapture,
   playCheck,
@@ -468,7 +468,7 @@ function CorrBoard({
                 : s.losses
             : myTurn
               ? s.corrYourMove
-              : s.corrOppTurn(oppName(g))}
+              : fmt(s.corrOppTurn, { name: oppName(g) })}
         </div>
         {g.status === "active" && (
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>

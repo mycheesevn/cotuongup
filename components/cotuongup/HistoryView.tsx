@@ -21,7 +21,7 @@ import {
 import { createGame } from "@/lib/jieqi/engine";
 import { getDailyPuzzle, puzzleState } from "@/lib/jieqi/puzzles";
 import { useAuth } from "@/lib/supabase/AuthContext";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import type { JieqiState } from "@/lib/jieqi/types";
 import { siteOrigin } from "@/lib/jieqi/share";
 import type { VideoGame } from "./VideoExportModal";
@@ -76,6 +76,8 @@ function ratingSparkPoints(pts: { rating: number }[]): string {
 
 export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
   const s = STR[lang];
+  const resultText = (r: "win" | "loss" | "draw") =>
+    r === "win" ? s.resultWin : r === "loss" ? s.resultLoss : s.resultDraw;
   const { user, configured } = useAuth();
   const [games, setGames] = useState<SavedGame[]>([]);
   const [puzzles, setPuzzles] = useState<PuzzleResult[]>([]);
@@ -133,7 +135,7 @@ export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
     onReplay({
       moves: r.moves ? r.moves.split(",").filter(Boolean) : [],
       state: puzzleState(p),
-      title: `${s.puzzleNum(r.puzzle_id)} · ${fmtDate(r.created_at, lang)} · ${
+      title: `${fmt(s.puzzleNum, { n: r.puzzle_id })} · ${fmtDate(r.created_at, lang)} · ${
         r.solved ? s.puzzleSolved : s.puzzleFailed
       }`,
     });
@@ -226,7 +228,7 @@ export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
                       <strong>
                         {g.player_color === "cvc"
                           ? `🤖 ${s.cvcTitle}`
-                          : s.resultText(g.result as "win" | "loss" | "draw")}
+                          : resultText(g.result as "win" | "loss" | "draw")}
                       </strong>
                       <span className="cu-history-sub">
                         {g.player_color === "cvc"
@@ -251,7 +253,7 @@ export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
                           title: `${fmtDate(g.created_at, lang)} · ${
                             g.player_color === "cvc"
                               ? `🤖 ${s.cvcTitle}`
-                              : s.resultText(
+                              : resultText(
                                   g.result as "win" | "loss" | "draw"
                                 )
                           }`,
@@ -274,7 +276,7 @@ export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
                                 : g.result === "loss"
                                   ? s.cvcBlackWon
                                   : s.cvcDrawn
-                              : `${s.resultText(
+                              : `${resultText(
                                   g.result as "win" | "loss" | "draw"
                                 )} · ${s.level} ${g.ai_level}`,
                           subtitle: `${moves.length} ${s.movesCount} · ${fmtDate(
@@ -342,7 +344,7 @@ export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
                           </span>
                           <span className="cu-history-main">
                             <strong>
-                              {s.resultText(
+                              {resultText(
                                 myResult as "win" | "loss" | "draw"
                               )}
                               {m.opponent_name
@@ -413,7 +415,7 @@ export function HistoryView({ lang, onReplay, onExportVideo }: Props) {
                             {r.solved ? s.puzzleSolved : s.puzzleFailed}
                           </strong>
                           <span className="cu-history-sub">
-                            {s.puzzleNum(r.puzzle_id)} · {moves.length}{" "}
+                            {fmt(s.puzzleNum, { n: r.puzzle_id })} · {moves.length}{" "}
                             {s.movesCount} · {fmtDate(r.created_at, lang)}
                           </span>
                         </span>

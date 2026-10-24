@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   acceptChallenge,
   declineChallenge,
@@ -166,7 +166,7 @@ export function FriendsView({
                     }`}
                   >
                     <span className="cu-history-main">
-                      <strong>{s.challengeFrom(c.challenger_name)}</strong>
+                      <strong>{fmt(s.challengeFrom, { name: c.challenger_name })}</strong>
                     </span>
                     <span className="cu-room-order-btns">
                       <button

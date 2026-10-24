@@ -1,6 +1,6 @@
 "use client";
 
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { loadGuestStats } from "@/lib/guestStats";
 
 interface Props {
@@ -12,8 +12,8 @@ export function GuestTeaser({ lang }: Props) {
   const s = STR[lang];
   const stats = loadGuestStats();
   const parts: string[] = [];
-  if (stats.games > 0) parts.push(s.guestTeaserGames(stats.games));
-  if (stats.puzzles > 0) parts.push(s.guestTeaserPuzzles(stats.puzzles));
+  if (stats.games > 0) parts.push(fmt(s.guestTeaserGames, { n: stats.games }));
+  if (stats.puzzles > 0) parts.push(fmt(s.guestTeaserPuzzles, { n: stats.puzzles }));
 
   return (
     <div className="cu-guest-teaser">

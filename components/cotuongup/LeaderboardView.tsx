@@ -17,7 +17,7 @@ import {
   xpForLevel,
   START_RATING,
 } from "@/lib/jieqi/rating";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { FriendButton } from "./FriendButton";
 import { fetchFollowingIds } from "@/lib/supabase/friends";
 import { shareAchievement } from "@/lib/jieqi/achievementCard";
@@ -60,7 +60,7 @@ export function LeaderboardView({ lang }: { lang: Lang }) {
     try {
       const outcome = await shareAchievement(
         "rank",
-        { title: s.achRankTitle(myRank), rank: myRank },
+        { title: fmt(s.achRankTitle, { rank: myRank }), rank: myRank },
         lang
       );
       setShareToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -199,7 +199,7 @@ export function LeaderboardView({ lang }: { lang: Lang }) {
                         displayName(me.username, user.email ?? null, lang)}
                     </span>
                     <span className="cu-stats">
-                      Lv {myLevel} · {s.xpToNext(xpNext - me.xp, myLevel + 1)}
+                      Lv {myLevel} · {fmt(s.xpToNext, { xp: xpNext - me.xp, level: myLevel + 1 })}
                     </span>
                   </div>
                   <div

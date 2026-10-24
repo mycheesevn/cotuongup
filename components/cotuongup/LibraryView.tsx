@@ -19,6 +19,7 @@ import {
   findLesson,
   isChapterUnlocked,
   isLessonUnlocked,
+  ltext,
   nextLessonId,
 } from "../../lib/jieqi/library";
 import {
@@ -27,6 +28,7 @@ import {
   syncLibraryProgress,
 } from "../../lib/supabase/libraryProgress";
 import type { Lang, Strings } from "../../lib/jieqi/i18n";
+import { fmt } from "../../lib/jieqi/i18n";
 import type {
   Color,
   JieqiState,
@@ -122,7 +124,7 @@ export function LibraryView({ lang, s }: { lang: Lang; s: Strings }) {
                 style={{ width: `${(doneCount / TOTAL_LESSONS) * 100}%` }}
               />
             </div>
-            <span>{s.libProgress(doneCount, TOTAL_LESSONS)}</span>
+            <span>{fmt(s.libProgress, { done: doneCount, total: TOTAL_LESSONS })}</span>
           </div>
         </div>
         <div className="cu-lib-chapters">
@@ -145,19 +147,17 @@ export function LibraryView({ lang, s }: { lang: Lang; s: Strings }) {
                 <span className="cu-lib-cicon">{unlocked ? ch.icon : "🔒"}</span>
                 <span className="cu-lib-cbody">
                   <span className="cu-lib-ctitle">
-                    {ch.title[lang]}
+                    {ltext(ch.title, lang)}
                     {complete && <em> ✓</em>}
                   </span>
                   <span className="cu-lib-csub">
                     {unlocked
-                      ? ch.subtitle[lang]
-                      : s.libUnlockHint(
-                          LIBRARY[ci - 1]?.title[lang] ?? ""
-                        )}
+                      ? ltext(ch.subtitle, lang)
+                      : fmt(s.libUnlockHint, { title: LIBRARY[ci - 1] ? ltext(LIBRARY[ci - 1].title, lang) : "" })}
                   </span>
                   <span className="cu-lib-cmeta">
                     {unlocked
-                      ? s.libLessons(chDone, ch.lessons.length)
+                      ? fmt(s.libLessons, { done: chDone, total: ch.lessons.length })
                       : ""}
                   </span>
                 </span>
@@ -198,8 +198,8 @@ function ChapterView({
         <div className="cu-lib-chead">
           <span className="cu-lib-cicon">{ch.icon}</span>
           <div>
-            <h2>{ch.title[lang]}</h2>
-            <p>{ch.subtitle[lang]}</p>
+            <h2>{ltext(ch.title, lang)}</h2>
+            <p>{ltext(ch.subtitle, lang)}</p>
           </div>
         </div>
         <div className="cu-lib-lessons">
@@ -219,7 +219,7 @@ function ChapterView({
                 <span className="cu-lib-lnum">
                   {finished ? "✅" : unlocked ? `${i + 1}` : "🔒"}
                 </span>
-                <span className="cu-lib-ltitle">{l.title[lang]}</span>
+                <span className="cu-lib-ltitle">{ltext(l.title, lang)}</span>
                 <span className="cu-lib-lgo">{unlocked ? "›" : ""}</span>
               </button>
             );
@@ -458,10 +458,10 @@ function LessonPlayer({
             {s.libBack}
           </button>
           <span className="cu-lib-stepcount">
-            {finished ? s.libDone : s.libStep(stepIdx + 1, n)}
+            {finished ? s.libDone : fmt(s.libStep, { cur: stepIdx + 1, total: n })}
           </span>
         </div>
-        <h2 className="cu-lib-lesson-title">{lesson.title[lang]}</h2>
+        <h2 className="cu-lib-lesson-title">{ltext(lesson.title, lang)}</h2>
 
         {!finished ? (
           <>
@@ -474,8 +474,8 @@ function LessonPlayer({
             >
               <p>
                 {quizActive
-                  ? (step!.quizPrompt?.[lang] ?? step!.text[lang])
-                  : step!.text[lang]}
+                  ? ltext(step!.quizPrompt ?? step!.text, lang)
+                  : ltext(step!.text, lang)}
               </p>
               {wrongMsg && quizActive && (
                 <p className="cu-lib-wrong">{s.libTryAgain}</p>
@@ -554,7 +554,7 @@ function LessonPlayer({
         ) : (
           <>
             <div className="cu-lib-card is-outro" role="status">
-              <p>{lesson.outro[lang]}</p>
+              <p>{ltext(lesson.outro, lang)}</p>
             </div>
             {!finishing ? (
               <button

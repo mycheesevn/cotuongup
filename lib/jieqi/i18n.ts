@@ -1,6 +1,9 @@
-// Bilingual UI strings (English / Vietnamese).
+// UI strings. Bundled VI/EN dictionaries are the always-available
+// fallback; the hub's central i18n store can add further locales at
+// runtime (see i18nCentral.ts), so dictionary values are plain strings
+// (templates with {placeholders}, filled via fmt()) or string arrays.
 
-export type Lang = "en" | "vi";
+export type Lang = string;
 
 export interface Strings {
   title: string;
@@ -21,15 +24,16 @@ export interface Strings {
   switchSides: string;
   redName: string;
   blackName: string;
-  toMove: (colorName: string, check: boolean) => string;
-  checkmate: (winnerName: string) => string;
-  stalemate: (winnerName: string) => string;
+  toMove: string;
+  toMoveCheck: string;
+  checkmate: string;
+  stalemate: string;
   thinking: string;
-  thinkMeta: (levelLabel: string, depth: number) => string;
+  thinkMeta: string;
   computer: string;
   strength: string;
   lastSearch: string;
-  searchStats: (depth: number, nodes: string, secs: string) => string;
+  searchStats: string;
   captured: string;
   youTook: string;
   computerTook: string;
@@ -38,7 +42,7 @@ export interface Strings {
   howToPlay: string;
   helpBullets: string[];
   boardLabel: string;
-  levelLabel: (n: number) => string;
+  levelLabel: string;
   levelDesc: string[];
   soundOn: string;
   soundOff: string;
@@ -46,11 +50,11 @@ export interface Strings {
   modePuzzle: string;
   modeLibrary: string;
   libTagline: string;
-  libProgress: (done: number, total: number) => string;
-  libLessons: (done: number, total: number) => string;
-  libUnlockHint: (title: string) => string;
+  libProgress: string;
+  libLessons: string;
+  libUnlockHint: string;
   libBack: string;
-  libStep: (cur: number, total: number) => string;
+  libStep: string;
   libShowMove: string;
   libExploreDone: string;
   libFindMove: string;
@@ -61,11 +65,11 @@ export interface Strings {
   libNextLesson: string;
   libBackToLibrary: string;
   puzzleToday: string;
-  puzzleNum: (n: number) => string;
-  mateIn: (n: number) => string;
-  moveCount: (used: number, total: number) => string;
+  puzzleNum: string;
+  mateIn: string;
+  moveCount: string;
   youAreRed: string;
-  streak: (n: number) => string;
+  streak: string;
   noStreak: string;
   alreadySolved: string;
   hintBtn: string;
@@ -77,10 +81,10 @@ export interface Strings {
   puzzleHelpBullets: string[];
   timeControl: string;
   unlimited: string;
-  minutes: (n: number) => string;
+  minutes: string;
   clock: string;
   you: string;
-  timeout: (winnerName: string) => string;
+  timeout: string;
   opening: string;
   modeAnalysis: string;
   evaluation: string;
@@ -93,19 +97,17 @@ export interface Strings {
   navPrev: string;
   navNext: string;
   navLast: string;
-  moveClass: {
-    best: string;
-    good: string;
-    inaccuracy: string;
-    mistake: string;
-    blunder: string;
-  };
+  moveClassBest: string;
+  moveClassGood: string;
+  moveClassInaccuracy: string;
+  moveClassMistake: string;
+  moveClassBlunder: string;
   commentary: string;
   commentaryStart: string;
   autoPlay: string;
   autoPause: string;
   playSpeed: string;
-  playSpeedSec: (n: number) => string;
+  playSpeedSec: string;
   modeSetup: string;
   modeHistory: string;
   modeLeaderboard: string;
@@ -119,10 +121,10 @@ export interface Strings {
   notifEmpty: string;
   notifLoadMore: string;
   checkinTitle: string;
-  checkinStreak: (n: number) => string;
+  checkinStreak: string;
   checkinClaim: string;
   checkinDone: string;
-  checkinClaimed: (streak: number, xp: number) => string;
+  checkinClaimed: string;
   checkinError: string;
   checkinHint: string;
   checkinGuest: string;
@@ -136,11 +138,11 @@ export interface Strings {
   friendsOnline: string;
   friendsInMatch: string;
   friendsChallengeIncoming: string;
-  challengeFrom: (name: string) => string;
+  challengeFrom: string;
   challengeAccept: string;
   challengeDecline: string;
-  challengeDeclined: (name: string) => string;
-  hubChallengeTitle: (name: string) => string;
+  challengeDeclined: string;
+  hubChallengeTitle: string;
   hubChallengeSend: string;
   hubChallengeLater: string;
   hubChallengeError: string;
@@ -162,7 +164,7 @@ export interface Strings {
   roomCopyCode: string;
   roomCopyLink: string;
   roomPromote: string;
-  roomPromoMembers: (n: number) => string;
+  roomPromoMembers: string;
   roomCopied: string;
   roomMembers: string;
   roomTurnOrder: string;
@@ -192,7 +194,7 @@ export interface Strings {
   roomDeleteError: string;
   roomDeletedNotice: string;
   roomYourTurn: string;
-  roomTurnOf: (name: string) => string;
+  roomTurnOf: string;
   roomSpectating: string;
   liveTitle: string;
   liveMenu: string;
@@ -245,7 +247,7 @@ export interface Strings {
   voiceListenConnected: string;
   voiceAllowListeners: string;
   voiceListenersPresent: string;
-  roomMoveBadge: (n: number) => string;
+  roomMoveBadge: string;
   roomRedWins: string;
   roomBlackWins: string;
   roomDraw: string;
@@ -256,7 +258,7 @@ export interface Strings {
   roomMatchInProgress: string;
   roomKicked: string;
   roomVs: string;
-  roomWatchers: (n: number) => string;
+  roomWatchers: string;
   roomPlaying: string;
   roomLobby: string;
   roomPublic: string;
@@ -270,7 +272,7 @@ export interface Strings {
   roomNoPublicRooms: string;
   roomHotRooms: string;
   roomMatches7d: string;
-  roomXpEarned: (n: number) => string;
+  roomXpEarned: string;
   roomCreateTournament: string;
   roomTournamentName: string;
   roomTournamentNamePh: string;
@@ -298,15 +300,15 @@ export interface Strings {
   guestNoMatch: string;
   guestNoRooms: string;
   guestLive: string;
-  inviteMembers: (n: number) => string;
+  inviteMembers: string;
   inviteInvalid: string;
-  guestTeaserGames: (n: number) => string;
-  guestTeaserPuzzles: (n: number) => string;
+  guestTeaserGames: string;
+  guestTeaserPuzzles: string;
   guestTeaserCta: string;
   victoryNudgeTitle: string;
-  victoryNudgeText: (games: number) => string;
+  victoryNudgeText: string;
   puzzleNudgeTitle: string;
-  puzzleNudgeText: (puzzles: number) => string;
+  puzzleNudgeText: string;
   nudgeSignup: string;
   nudgeLater: string;
   refBannerText: string;
@@ -327,7 +329,7 @@ export interface Strings {
   videoExport: string;
   videoTitle: string;
   videoDesc: string;
-  videoMoves: (n: number) => string;
+  videoMoves: string;
   videoStart: string;
   videoRecording: string;
   videoCancel: string;
@@ -342,22 +344,24 @@ export interface Strings {
   videoSpeedFast: string;
   videoMic: string;
   videoMicDenied: string;
-  shareWinTitle: (level: string) => string;
+  shareWinTitle: string;
   shareDrawTitle: string;
   shareLossTitle: string;
-  shareGameSubtitle: (moves: number, opening: string | null) => string;
+  shareGameSubtitle: string;
+  shareGameSubtitleOpening: string;
   shareFooter: string;
   shareDone: string;
   shareDownloaded: string;
   sharePuzzleTitle: string;
-  sharePuzzleSubtitle: (moves: number) => string;
-  sharedGameTitle: (level: number | null) => string;
+  sharePuzzleSubtitle: string;
+  sharedGameTitle: string;
+  sharedGameTitleLevel: string;
   achShare: string;
-  achStreakTitle: (days: number) => string;
-  streakShareBtn: (days: number) => string;
-  achRankTitle: (rank: number) => string;
+  achStreakTitle: string;
+  streakShareBtn: string;
+  achRankTitle: string;
   achProfileTitle: string;
-  achProfileLine: (title: string, rating: number, level: number) => string;
+  achProfileLine: string;
   achCta: string;
   blogLink: string;
   installApp: string;
@@ -379,15 +383,15 @@ export interface Strings {
   pushNudgeOn: string;
   pushNudgeLater: string;
   rushTab: string;
-  rushMateIn: (n: number) => string;
-  rushWrong: () => string;
-  rushOver: (score: number, best: number) => string;
+  rushMateIn: string;
+  rushWrong: string;
+  rushOver: string;
   rushRetry: string;
   rushBack: string;
   rushLives: string;
   rushNewBest: string;
-  rushShareTitle: (score: number) => string;
-  rushShareSubtitle: (score: number, best: number) => string;
+  rushShareTitle: string;
+  rushShareSubtitle: string;
   corrTitle: string;
   corrNew: string;
   corrLogin: string;
@@ -398,9 +402,9 @@ export interface Strings {
   corrWaiting: string;
   corrBack: string;
   corrYourMove: string;
-  corrOppTurn: (name: string) => string;
+  corrOppTurn: string;
   corrHint: string;
-  ambStats: (invites: number, xp: number) => string;
+  ambStats: string;
   referralTitle: string;
   referralDesc: string;
   referralCopy: string;
@@ -411,7 +415,7 @@ export interface Strings {
   cpTitleLabel: string;
   cpTitlePh: string;
   cpMovesLabel: string;
-  cpMateIn: (n: number) => string;
+  cpMateIn: string;
   cpVerifyHint: string;
   cpVerifyBtn: string;
   cpBack: string;
@@ -421,7 +425,7 @@ export interface Strings {
   cpLoginRequired: string;
   cpPublished: string;
   cpUntitled: string;
-  cpBy: (name: string) => string;
+  cpBy: string;
   cpPlay: string;
   cpSolved: string;
   cpBackToList: string;
@@ -439,16 +443,19 @@ export interface Strings {
   cpLibraryTitle: string;
   cpLibraryHint: string;
   cpUseSample: string;
-  cpSampleLabel: (id: number) => string;
+  cpSampleLabel: string;
   cpRemix: string;
-  cpRemixTitle: (name: string) => string;
+  cpRemixTitle: string;
   cpRename: string;
   cpRenameTitle: string;
   cpRenamed: string;
   cpSave: string;
   cpFeaturedSection: string;
   cpClassicSection: string;
-  cpSort: Record<string, string>;
+  cpSortNew: string;
+  cpSortPopular: string;
+  cpSortWeekly: string;
+  cpSortMine: string;
   leaderboard: string;
   leaderboardLogin: string;
   leaderboardEmpty: string;
@@ -492,7 +499,7 @@ export interface Strings {
   statsByYear: string;
   resumedGame: string;
   hintDepth: string;
-  xpToNext: (xp: number, lvl: number) => string;
+  xpToNext: string;
   authDisplayName: string;
   authDisplayNamePh: string;
   ratingProgress: string;
@@ -535,7 +542,9 @@ export interface Strings {
   loading: string;
   movesCount: string;
   replayBack: string;
-  resultText: (r: "win" | "loss" | "draw") => string;
+  resultWin: string;
+  resultLoss: string;
+  resultDraw: string;
   setupPieces: string;
   setupMove: string;
   setupErase: string;
@@ -575,29 +584,29 @@ export interface Strings {
   coachTitle: string;
   coachBack: string;
   coachAnalyzing: string;
-  coachAnalyzed: (done: number, total: number) => string;
+  coachAnalyzed: string;
   coachAccuracy: string;
   coachTopMistakes: string;
   coachNoMistakes: string;
   coachStrength: string;
-  coachStrengthBrilliant: (move: string, gain: string) => string;
-  coachStrengthStreak: (n: number, from: number, to: number) => string;
-  coachStrengthBestRate: (rate: number) => string;
-  coachStrengthStrongFinish: (before: number, after: number) => string;
-  coachStrengthSolidPhase: (phase: string) => string;
+  coachStrengthBrilliant: string;
+  coachStrengthStreak: string;
+  coachStrengthBestRate: string;
+  coachStrengthStrongFinish: string;
+  coachStrengthSolidPhase: string;
   coachPhaseOpening: string;
   coachPhaseMiddlegame: string;
   coachPhaseEndgame: string;
   coachBetter: string;
   coachYouPlayed: string;
-  coachMoveNum: (n: number) => string;
+  coachMoveNum: string;
   coachShareCard: string;
   coachNoData: string;
-  coachCardAccuracy: (n: number) => string;
+  coachCardAccuracy: string;
   // --- Cờ Úp (Jieqi) specific — appended; keep VI/EN key sets identical ---
   coveredPiece: string;
   flipReveal: string;
-  flippedTo: (pieceName: string) => string;
+  flippedTo: string;
   coveredCapturedReveal: string;
   remainingDarkTitle: string;
   remainingDarkEmpty: string;
@@ -609,14 +618,14 @@ export interface Strings {
   roomDrawOffer: string;
   roomDrawAccept: string;
   roomDrawDecline: string;
-  roomDrawOfferedBy: (name: string) => string;
+  roomDrawOfferedBy: string;
   roomDrawOffered: string;
   roomDrawWaiting: string;
   roomDealVerified: string;
   roomDealVerifyFailed: string;
   roomRevealedTitle: string;
-  roomFlipped: (pieceName: string) => string;
-  roomCapturedDark: (pieceName: string) => string;
+  roomFlipped: string;
+  roomCapturedDark: string;
   roomSendingMove: string;
   roomReasonDraw120: string;
   roomCoveredSuffix: string;
@@ -642,15 +651,16 @@ export const STR: Record<Lang, Strings> = {
     switchSides: "🔄 Switch sides",
     redName: "Red",
     blackName: "Black",
-    toMove: (c, check) => `${c} to move${check ? " — check!" : ""}`,
-    checkmate: (w) => `Checkmate — ${w} wins!`,
-    stalemate: (w) => `Stalemate — ${w} wins!`,
+    toMove: "{color} to move",
+    toMoveCheck: "{color} to move — check!",
+    checkmate: "Checkmate — {name} wins!",
+    stalemate: "Stalemate — {name} wins!",
     thinking: "Computer is thinking",
-    thinkMeta: (lvl, d) => `· ${lvl} · depth ${d}`,
+    thinkMeta: "· {level} · depth {depth}",
     computer: "Computer",
     strength: "Strength",
     lastSearch: "Last search",
-    searchStats: (d, n, s) => `depth ${d} · ${n} nodes · ${s}s`,
+    searchStats: "depth {depth} · {nodes} nodes · {secs}s",
     captured: "Captured",
     youTook: "You took",
     computerTook: "Computer took",
@@ -667,7 +677,7 @@ export const STR: Record<Lang, Strings> = {
       "Generals may not face each other across an open file.",
     ],
     boardLabel: "Jieqi board",
-    levelLabel: (n) => `Level ${n}`,
+    levelLabel: "Level {n}",
     levelDesc: [
       "Absolute beginner",
       "Beginner",
@@ -688,11 +698,11 @@ export const STR: Record<Lang, Strings> = {
     modePuzzle: "Daily puzzle",
     modeLibrary: "📚 Playbook",
     libTagline: "An interactive journey: openings, traps, mating art and endgames. Complete lessons to unlock the next chapter.",
-    libProgress: (d, t) => `${d} / ${t} lessons completed`,
-    libLessons: (d, t) => `${d} / ${t} lessons`,
-    libUnlockHint: (title) => `Complete “${title}” to unlock`,
+    libProgress: "{done} / {total} lessons completed",
+    libLessons: "{done} / {total} lessons",
+    libUnlockHint: "Complete “{title}” to unlock",
     libBack: "‹ Library",
-    libStep: (c, t) => `Step ${c} / ${t}`,
+    libStep: "Step {cur} / {total}",
     libShowMove: "Show move ›",
     libExploreDone: "Done exploring ›",
     libFindMove: "Find the move!",
@@ -703,11 +713,11 @@ export const STR: Record<Lang, Strings> = {
     libNextLesson: "Next lesson ›",
     libBackToLibrary: "Back to library",
     puzzleToday: "Today's puzzle",
-    puzzleNum: (n) => `Puzzle #${n}`,
-    mateIn: (n) => `Mate in ${n}`,
-    moveCount: (u, n) => `Move ${u} / ${n}`,
+    puzzleNum: "Puzzle #{n}",
+    mateIn: "Mate in {n}",
+    moveCount: "Move {used} / {total}",
     youAreRed: "You are Red, to move",
-    streak: (n) => `🔥 ${n}-day streak`,
+    streak: "🔥 {n}-day streak",
     noStreak: "Solve daily to build a streak!",
     alreadySolved: "Already solved today — nice!",
     hintBtn: "💡 Hint",
@@ -725,10 +735,10 @@ export const STR: Record<Lang, Strings> = {
     ],
     timeControl: "Time",
     unlimited: "Unlimited",
-    minutes: (n) => `${n} min`,
+    minutes: "{n} min",
     clock: "Clock",
     you: "You",
-    timeout: (w) => `Time out — ${w} wins!`,
+    timeout: "Time out — {name} wins!",
     opening: "Opening",
     modeAnalysis: "Analysis",
     evaluation: "Evaluation",
@@ -741,19 +751,17 @@ export const STR: Record<Lang, Strings> = {
     navPrev: "Previous move",
     navNext: "Next move",
     navLast: "Final position",
-    moveClass: {
-      best: "Best move!",
-      good: "Good",
-      inaccuracy: "Inaccuracy",
-      mistake: "Mistake",
-      blunder: "Blunder",
-    },
+    moveClassBest: "Best move!",
+    moveClassGood: "Good",
+    moveClassInaccuracy: "Inaccuracy",
+    moveClassMistake: "Mistake",
+    moveClassBlunder: "Blunder",
     commentary: "Commentary",
     commentaryStart: "Starting position — press ▶ to step through the moves.",
     autoPlay: "Auto-play",
     autoPause: "Pause",
     playSpeed: "Replay speed",
-    playSpeedSec: (n) => `${n}s / move`,
+    playSpeedSec: "{n}s / move",
     modeSetup: "Setup",
     setupPieces: "Pieces",
     setupMove: "Move pieces",
@@ -802,10 +810,10 @@ export const STR: Record<Lang, Strings> = {
     notifEmpty: "No notifications yet.",
     notifLoadMore: "Load more",
     checkinTitle: "Daily check-in",
-    checkinStreak: (n) => `🔥 ${n}-day streak!`,
+    checkinStreak: "🔥 {n}-day streak!",
     checkinClaim: "Check in today",
     checkinDone: "Already checked in today",
-    checkinClaimed: (streak, xp) => `Checked in! ${streak}-day streak, +${xp} XP.`,
+    checkinClaimed: "Checked in! {streak}-day streak, +{xp} XP.",
     checkinError: "Check-in failed, please try again.",
     checkinHint: "Check in every day to grow your streak — more consecutive days, more XP (up to +40).",
     checkinGuest: "Log in to check in daily and earn streak XP!",
@@ -819,11 +827,11 @@ export const STR: Record<Lang, Strings> = {
     friendsOnline: "online",
     friendsInMatch: "in a match",
     friendsChallengeIncoming: "⚔️ Challenges",
-    challengeFrom: (name: string) => `⚔️ ${name} challenges you!`,
+    challengeFrom: "⚔️ {name} challenges you!",
     challengeAccept: "Accept",
     challengeDecline: "Decline",
-    challengeDeclined: (name: string) => `${name} declined your challenge.`,
-    hubChallengeTitle: (name: string) => `Challenge ${name}?`,
+    challengeDeclined: "{name} declined your challenge.",
+    hubChallengeTitle: "Challenge {name}?",
     hubChallengeSend: "⚔️ Challenge",
     hubChallengeLater: "Later",
     hubChallengeError: "Could not send the challenge. Please try again.",
@@ -845,7 +853,7 @@ export const STR: Record<Lang, Strings> = {
     roomCopyCode: "Copy code",
     roomCopyLink: "Copy invite link",
     roomPromote: "Promote",
-    roomPromoMembers: (n) => `${n} member${n === 1 ? "" : "s"} in room`,
+    roomPromoMembers: "{n} member(s) in room",
     roomCopied: "Copied!",
     roomMembers: "Members",
     roomTurnOrder: "Match order",
@@ -877,7 +885,7 @@ export const STR: Record<Lang, Strings> = {
     roomDeleteError: "Could not delete the room. Please try again.",
     roomDeletedNotice: "This room was deleted by its owner.",
     roomYourTurn: "Your turn!",
-    roomTurnOf: (name: string) => `${name} to move`,
+    roomTurnOf: "{name} to move",
     roomSpectating: "You are spectating this match",
     roomReact: "React",
     roomWaiting: "Waiting for your turn…",
@@ -907,7 +915,7 @@ export const STR: Record<Lang, Strings> = {
     voiceListenConnected: "Listening to the players",
     voiceAllowListeners: "Let spectators listen",
     voiceListenersPresent: "👂 Spectators are listening",
-    roomMoveBadge: (n: number) => `Move ${n}`,
+    roomMoveBadge: "Move {n}",
     roomRedWins: "🔴 Red wins",
     roomBlackWins: "⚫ Black wins",
     roomDraw: "Draw",
@@ -918,7 +926,7 @@ export const STR: Record<Lang, Strings> = {
     roomMatchInProgress: "A match is already in progress.",
     roomKicked: "You were removed from the room.",
     roomVs: "vs",
-    roomWatchers: (n) => `${n} watching`,
+    roomWatchers: "{n} watching",
     roomPlaying: "Playing",
     roomLobby: "Lobby",
     roomPublic: "Public room",
@@ -932,7 +940,7 @@ export const STR: Record<Lang, Strings> = {
     roomNoPublicRooms: "No public rooms yet — create the first one!",
     roomHotRooms: "Hot rooms",
     roomMatches7d: "matches/7d",
-    roomXpEarned: (n: number) => `+${n} XP`,
+    roomXpEarned: "+{n} XP",
     roomCreateTournament: "Create tournament",
     roomTournamentName: "Tournament name",
     roomTournamentNamePh: "E.g. Autumn cup",
@@ -960,17 +968,15 @@ export const STR: Record<Lang, Strings> = {
     guestNoMatch: "No live match right now — check back soon.",
     guestNoRooms: "No public rooms yet. Be the first to create one after logging in!",
     guestLive: "live",
-    inviteMembers: (n: number) => `${n} members`,
+    inviteMembers: "{n} members",
     inviteInvalid: "This invite link is invalid or expired.",
-    guestTeaserGames: (n: number) => `You've played ${n} games as a guest`,
-    guestTeaserPuzzles: (n: number) => `solved ${n} puzzles as a guest`,
+    guestTeaserGames: "You've played {n} games as a guest",
+    guestTeaserPuzzles: "solved {n} puzzles as a guest",
     guestTeaserCta: "Log in free to save your progress and play with friends!",
     victoryNudgeTitle: "\uD83C\uDF89 Brilliant win!",
-    victoryNudgeText: (games: number) =>
-      `Create a free account to save this victory to your profile — and keep the ${games} game${games === 1 ? "" : "s"} you've played on this device. Plus +50 XP welcome bonus!`,
+    victoryNudgeText: "Create a free account to save this victory to your profile — and keep the {games} game(s) you've played on this device. Plus +50 XP welcome bonus!",
     puzzleNudgeTitle: "\uD83E\uDDE9 Nicely solved!",
-    puzzleNudgeText: (puzzles: number) =>
-      `Create a free account to save your streak — and keep the ${puzzles} puzzle${puzzles === 1 ? "" : "s"} you've solved on this device. Plus +50 XP welcome bonus!`,
+    puzzleNudgeText: "Create a free account to save your streak — and keep the {puzzles} puzzle(s) you've solved on this device. Plus +50 XP welcome bonus!",
     nudgeSignup: "Sign up free",
     nudgeLater: "Later",
     refBannerText: "\uD83C\uDF81 You've been invited by a friend — sign up and you both get +20 XP!",
@@ -991,7 +997,7 @@ export const STR: Record<Lang, Strings> = {
     videoExport: "Export video",
     videoTitle: "Export game video",
     videoDesc: "Record the whole game as a video clip with sound to share.",
-    videoMoves: (n: number) => `Game has ${n} moves`,
+    videoMoves: "Game has {n} moves",
     videoStart: "Start recording",
     videoRecording: "Recording\u2026 keep the screen on.",
     videoCancel: "Cancel",
@@ -1006,22 +1012,24 @@ export const STR: Record<Lang, Strings> = {
     videoSpeedFast: "Fast",
     videoMic: "🎤 Record voice commentary",
     videoMicDenied: "Couldn\u2019t access the microphone.",
-    shareWinTitle: (level: string) => `I beat the computer ${level}! \uD83C\uDFC6`,
+    shareWinTitle: "I beat the computer {level}! 🏆",
     shareDrawTitle: "It's a draw! \uD83E\uDD1D",
     shareLossTitle: "Lost a good game! \uD83D\uDCAA",
-    shareGameSubtitle: (moves: number, opening: string | null) => `${moves} moves${opening ? ` \u00B7 ${opening}` : ""}`,
+    shareGameSubtitle: "{moves} moves",
+    shareGameSubtitleOpening: "{moves} moves · {opening}",
     shareFooter: "\uD83D\uDC49 Challenge me at cotuongup.synerworlds.com",
     shareDone: "Shared! \uD83C\uDF89",
     shareDownloaded: "Image saved + link copied \uD83D\uDCCB",
     sharePuzzleTitle: "I solved today's puzzle! \uD83E\uDDE9",
-    sharePuzzleSubtitle: (moves: number) => `Mate in ${moves} moves`,
-    sharedGameTitle: (level: number | null) => `Shared game${level ? ` \u00B7 Computer Lv${level}` : ""}`,
+    sharePuzzleSubtitle: "Mate in {moves} moves",
+    sharedGameTitle: "Shared game",
+    sharedGameTitleLevel: "Shared game · Computer Lv{level}",
     achShare: "\uD83D\uDCE4 Brag",
-    achStreakTitle: (days: number) => `\uD83D\uDD25 ${days}-day puzzle streak!`,
-    streakShareBtn: (days) => `🔥 Share ${days}-day streak`,
-    achRankTitle: (rank: number) => `\uD83C\uDFC6 Ranked #${rank} on the leaderboard!`,
+    achStreakTitle: "🔥 {days}-day puzzle streak!",
+    streakShareBtn: "🔥 Share {days}-day streak",
+    achRankTitle: "🏆 Ranked #{rank} on the leaderboard!",
     achProfileTitle: "My Dark Xiangqi achievements",
-    achProfileLine: (title: string, rating: number, level: number) => `${title} \u00B7 ${rating} Elo \u00B7 Level ${level}`,
+    achProfileLine: "{title} · {rating} Elo · Level {level}",
     achCta: "\uD83D\uDC49 Play free at cotuongup.synerworlds.com",
     blogLink: "\uD83D\uDCD6 Guides",
     installApp: "\uD83D\uDCF2 Install app",
@@ -1043,15 +1051,15 @@ export const STR: Record<Lang, Strings> = {
     pushNudgeOn: "Turn on",
     pushNudgeLater: "Later",
     rushTab: "⚡ Puzzle Rush",
-    rushMateIn: (n) => `Mate in ${n} — go!`,
-    rushWrong: () => "Wrong move! Watch the answer…",
-    rushOver: (score, best) => `Time! You solved ${score} (best ${best}).`,
+    rushMateIn: "Mate in {n} — go!",
+    rushWrong: "Wrong move! Watch the answer…",
+    rushOver: "Time! You solved {score} (best {best}).",
     rushRetry: "Play again",
     rushBack: "Puzzles",
     rushLives: "Lives",
     rushNewBest: "New personal best!",
-    rushShareTitle: (score) => `I solved ${score} puzzles in Puzzle Rush!`,
-    rushShareSubtitle: (score, best) => `${score} solved · personal best ${best}`,
+    rushShareTitle: "I solved {score} puzzles in Puzzle Rush!",
+    rushShareSubtitle: "{score} solved · personal best {best}",
     corrTitle: "Correspondence",
     corrNew: "New game",
     corrLogin: "Log in to play correspondence chess.",
@@ -1062,10 +1070,9 @@ export const STR: Record<Lang, Strings> = {
     corrWaiting: "Waiting",
     corrBack: "My games",
     corrYourMove: "Your move — take your time.",
-    corrOppTurn: (name) => `Waiting for ${name}…`,
+    corrOppTurn: "Waiting for {name}…",
     corrHint: "Play one move whenever you like. Your opponent gets a push notification.",
-    ambStats: (invites: number, xp: number) =>
-      `\uD83C\uDF81 Ambassador: invited ${invites} ${invites === 1 ? "person" : "people"} \u00B7 +${xp} XP earned`,
+    ambStats: "🎁 Ambassador: invited {invites} person(s) · +{xp} XP earned",
     referralTitle: "\uD83C\uDF81 Invite friends",
     referralDesc: "Send your link to friends \u2014 when they log in and play 1 game, you both get +20 XP!",
     referralCopy: "Copy invite link",
@@ -1076,7 +1083,7 @@ export const STR: Record<Lang, Strings> = {
     cpTitleLabel: "Puzzle name",
     cpTitlePh: "E.g. Double chariot storm",
     cpMovesLabel: "Mate in",
-    cpMateIn: (n: number) => `${n} move${n > 1 ? "s" : ""}`,
+    cpMateIn: "{n} move(s)",
     cpVerifyHint: "Set up Red to force mate in the chosen moves. You must beat the engine yourself to prove the puzzle is sound.",
     cpVerifyBtn: "Verify \u2192",
     cpBack: "Back",
@@ -1086,7 +1093,7 @@ export const STR: Record<Lang, Strings> = {
     cpLoginRequired: "Log in to create puzzles.",
     cpPublished: "Puzzle published! \uD83C\uDF89",
     cpUntitled: "Untitled puzzle",
-    cpBy: (name: string) => `by ${name}`,
+    cpBy: "by {name}",
     cpPlay: "Play",
     cpSolved: "Solved",
     cpBackToList: "List",
@@ -1104,16 +1111,19 @@ export const STR: Record<Lang, Strings> = {
     cpLibraryTitle: "Sample puzzle library",
     cpLibraryHint: "60 verified classics. Community puzzles with 8+ likes or 20+ solves are auto-picked into \u2B50 above \u2014 pick any as a starting point, remix it, publish.",
     cpUseSample: "Use",
-    cpSampleLabel: (id: number) => `Puzzle #${id}`,
+    cpSampleLabel: "Puzzle #{id}",
     cpRemix: "\uD83D\uDD00 Remix this puzzle",
-    cpRemixTitle: (name: string) => `Remix: ${name}`,
+    cpRemixTitle: "Remix: {name}",
     cpRename: "Rename",
     cpRenameTitle: "Rename puzzle",
     cpRenamed: "Renamed!",
     cpSave: "Save",
     cpFeaturedSection: "Community picks",
     cpClassicSection: "Classics",
-    cpSort: { new: "New", popular: "Top", weekly: "Weekly", mine: "Mine" },
+    cpSortNew: "New",
+    cpSortPopular: "Top",
+    cpSortWeekly: "Weekly",
+    cpSortMine: "Mine",
     leaderboard: "Leaderboard",
     leaderboardLogin: "Log in to see the leaderboard.",
     leaderboardEmpty: "No players yet — be the first!",
@@ -1157,7 +1167,7 @@ export const STR: Record<Lang, Strings> = {
     statsByYear: "Year",
     resumedGame: "Resumed your unfinished game",
     hintDepth: "depth",
-    xpToNext: (xp, lvl) => `${xp} XP to Lv ${lvl}`,
+    xpToNext: "{xp} XP to Lv {level}",
     authDisplayName: "Display name (optional)",
     authDisplayNamePh: "Your name on the leaderboard",
     ratingProgress: "Rating progress",
@@ -1200,34 +1210,32 @@ export const STR: Record<Lang, Strings> = {
     loading: "Loading…",
     movesCount: "moves",
     replayBack: "Current game",
-    resultText: (r) =>
-      r === "win" ? "You won" : r === "loss" ? "You lost" : "Draw",
+    resultWin: "You won",
+    resultLoss: "You lost",
+    resultDraw: "Draw",
     coachReview: "🎓 Coach review",
     coachTitle: "Coach review",
     coachBack: "← Back",
     coachAnalyzing: "Analyzing your moves…",
-    coachAnalyzed: (d, t) => `${d}/${t} positions`,
+    coachAnalyzed: "{done}/{total} positions",
     coachAccuracy: "Accuracy",
     coachTopMistakes: "Costliest mistakes",
     coachNoMistakes: "No significant mistakes — a clean game!",
     coachStrength: "Bright spot",
-    coachStrengthBrilliant: (move, gain) => `Brilliant move: ${move} (${gain})`,
-    coachStrengthStreak: (n, from, to) =>
-      `${n} engine-level moves in a row (moves ${from}–${to})`,
-    coachStrengthBestRate: (rate) =>
-      `${rate}% of your moves matched the engine's best move`,
-    coachStrengthStrongFinish: (before, after) =>
-      `Strong finish: second half ${after} vs first half ${before}`,
-    coachStrengthSolidPhase: (phase) => `Most solid in the ${phase}`,
+    coachStrengthBrilliant: "Brilliant move: {move} ({gain})",
+    coachStrengthStreak: "{n} engine-level moves in a row (moves {from}–{to})",
+    coachStrengthBestRate: "{rate}% of your moves matched the engine's best move",
+    coachStrengthStrongFinish: "Strong finish: second half {after} vs first half {before}",
+    coachStrengthSolidPhase: "Most solid in the {phase}",
     coachPhaseOpening: "opening",
     coachPhaseMiddlegame: "middlegame",
     coachPhaseEndgame: "endgame",
     coachBetter: "Better",
     coachYouPlayed: "You played",
-    coachMoveNum: (n) => `Move ${n}`,
+    coachMoveNum: "Move {n}",
     coachShareCard: "📤 Share result card",
     coachNoData: "Not enough of your moves to review — play a longer game!",
-    coachCardAccuracy: (n) => `Accuracy: ${n}/100`,
+    coachCardAccuracy: "Accuracy: {n}/100",
     liveTitle: "📡 Go Live",
     liveMenu: "📡 Go Live",
     liveIntro:
@@ -1258,7 +1266,7 @@ export const STR: Record<Lang, Strings> = {
     liveOutroTitle: "Thanks for watching!",
     coveredPiece: "Face-down piece",
     flipReveal: "Flip & reveal",
-    flippedTo: (name: string) => `Flips to ${name}`,
+    flippedTo: "Flips to {name}",
     coveredCapturedReveal:
       "A captured face-down piece is revealed to everyone at once.",
     remainingDarkTitle: "Still face-down",
@@ -1271,15 +1279,14 @@ export const STR: Record<Lang, Strings> = {
     roomDrawOffer: "🤝 Offer draw",
     roomDrawAccept: "✓ Accept draw",
     roomDrawDecline: "✗ Decline",
-    roomDrawOfferedBy: (n: string) => `${n} offers a draw`,
+    roomDrawOfferedBy: "{name} offers a draw",
     roomDrawOffered: "Your opponent offers a draw",
     roomDrawWaiting: "Draw offer sent…",
     roomDealVerified: "✓ Deal verified (commitment matches)",
     roomDealVerifyFailed: "✗ Deal commitment MISMATCH!",
     roomRevealedTitle: "🃏 The true layout",
-    roomFlipped: (t: string) => `Flipped: ${t}`,
-    roomCapturedDark: (t: string) =>
-      `Captured a covered piece — it was: ${t}`,
+    roomFlipped: "Flipped: {piece}",
+    roomCapturedDark: "Captured a covered piece — it was: {piece}",
     roomSendingMove: "Sending move…",
     roomReasonDraw120: "120-ply draw",
     roomCoveredSuffix: " (face-down)",
@@ -1303,15 +1310,16 @@ export const STR: Record<Lang, Strings> = {
     switchSides: "🔄 Đổi bên",
     redName: "Đỏ",
     blackName: "Đen",
-    toMove: (c, check) => `${c} đi${check ? " — chiếu!" : ""}`,
-    checkmate: (w) => `Chiếu hết — ${w} thắng!`,
-    stalemate: (w) => `Hết nước đi — ${w} thắng!`,
+    toMove: "{color} đi",
+    toMoveCheck: "{color} đi — chiếu!",
+    checkmate: "Chiếu hết — {name} thắng!",
+    stalemate: "Hết nước đi — {name} thắng!",
     thinking: "Máy đang nghĩ",
-    thinkMeta: (lvl, d) => `· ${lvl} · sâu ${d}`,
+    thinkMeta: "· {level} · sâu {depth}",
     computer: "Máy tính",
     strength: "Trình độ",
     lastSearch: "Lần tính cuối",
-    searchStats: (d, n, s) => `sâu ${d} · ${n} nút · ${s} giây`,
+    searchStats: "sâu {depth} · {nodes} nút · {secs} giây",
     captured: "Quân bị ăn",
     youTook: "Bạn ăn",
     computerTook: "Máy ăn",
@@ -1328,7 +1336,7 @@ export const STR: Record<Lang, Strings> = {
       "Hai Tướng không được nhìn thẳng nhau trên cùng một cột mà không có quân cản.",
     ],
     boardLabel: "Bàn cờ úp",
-    levelLabel: (n) => `Cấp ${n}`,
+    levelLabel: "Cấp {n}",
     levelDesc: [
       "Mới bắt đầu",
       "Người mới chơi",
@@ -1349,11 +1357,11 @@ export const STR: Record<Lang, Strings> = {
     modePuzzle: "Thế cờ hằng ngày",
     modeLibrary: "📚 Bí kíp",
     libTagline: "Một cuộc hành trình tương tác: khai cuộc, bẫy cờ, sát pháp và tàn cuộc. Hoàn thành bài học để mở khóa chương tiếp theo.",
-    libProgress: (d, t) => `Đã hoàn thành ${d} / ${t} bài`,
-    libLessons: (d, t) => `${d} / ${t} bài`,
-    libUnlockHint: (title) => `Hoàn thành “${title}” để mở khóa`,
+    libProgress: "Đã hoàn thành {done} / {total} bài",
+    libLessons: "{done} / {total} bài",
+    libUnlockHint: "Hoàn thành “{title}” để mở khóa",
     libBack: "‹ Thư viện",
-    libStep: (c, t) => `Bước ${c} / ${t}`,
+    libStep: "Bước {cur} / {total}",
     libShowMove: "Xem nước đi ›",
     libExploreDone: "Tôi đã thử ›",
     libFindMove: "Tìm nước đi!",
@@ -1364,11 +1372,11 @@ export const STR: Record<Lang, Strings> = {
     libNextLesson: "Bài tiếp theo ›",
     libBackToLibrary: "Về thư viện",
     puzzleToday: "Thế cờ hôm nay",
-    puzzleNum: (n) => `Thế cờ #${n}`,
-    mateIn: (n) => `Chiếu hết trong ${n} nước`,
-    moveCount: (u, n) => `Nước ${u} / ${n}`,
+    puzzleNum: "Thế cờ #{n}",
+    mateIn: "Chiếu hết trong {n} nước",
+    moveCount: "Nước {used} / {total}",
     youAreRed: "Bạn cầm Đỏ, đi trước",
-    streak: (n) => `🔥 Chuỗi ${n} ngày`,
+    streak: "🔥 Chuỗi {n} ngày",
     noStreak: "Giải thế cờ mỗi ngày để giữ lửa!",
     alreadySolved: "Hôm nay giải xong rồi — giỏi lắm!",
     hintBtn: "💡 Gợi ý",
@@ -1386,10 +1394,10 @@ export const STR: Record<Lang, Strings> = {
     ],
     timeControl: "Thời gian",
     unlimited: "Không giới hạn",
-    minutes: (n) => `${n} phút`,
+    minutes: "{n} phút",
     clock: "Đồng hồ",
     you: "Bạn",
-    timeout: (w) => `Hết giờ — ${w} thắng!`,
+    timeout: "Hết giờ — {name} thắng!",
     opening: "Khai cuộc",
     modeAnalysis: "Phân tích",
     evaluation: "Đánh giá thế cờ",
@@ -1402,19 +1410,17 @@ export const STR: Record<Lang, Strings> = {
     navPrev: "Nước trước",
     navNext: "Nước tiếp",
     navLast: "Về cuối ván",
-    moveClass: {
-      best: "Nước hay nhất!",
-      good: "Tốt",
-      inaccuracy: "Chưa chuẩn",
-      mistake: "Sai lầm",
-      blunder: "Sai lầm nghiêm trọng",
-    },
+    moveClassBest: "Nước hay nhất!",
+    moveClassGood: "Tốt",
+    moveClassInaccuracy: "Chưa chuẩn",
+    moveClassMistake: "Sai lầm",
+    moveClassBlunder: "Sai lầm nghiêm trọng",
     commentary: "Bình luận",
     commentaryStart: "Vị trí ban đầu — bấm ▶ để xem từng nước đi.",
     autoPlay: "Tự động chạy",
     autoPause: "Tạm dừng",
     playSpeed: "Tốc độ chiếu lại",
-    playSpeedSec: (n) => `${n} giây / nước`,
+    playSpeedSec: "{n} giây / nước",
     modeSetup: "Sắp xếp",
     setupPieces: "Quân cờ",
     setupMove: "Di chuyển quân",
@@ -1463,10 +1469,10 @@ export const STR: Record<Lang, Strings> = {
     notifEmpty: "Chưa có thông báo nào.",
     notifLoadMore: "Xem thêm",
     checkinTitle: "Điểm danh hàng ngày",
-    checkinStreak: (n) => `🔥 Chuỗi ${n} ngày!`,
+    checkinStreak: "🔥 Chuỗi {n} ngày!",
     checkinClaim: "Điểm danh hôm nay",
     checkinDone: "Hôm nay đã điểm danh rồi",
-    checkinClaimed: (streak, xp) => `Điểm danh thành công! Chuỗi ${streak} ngày, +${xp} XP.`,
+    checkinClaimed: "Điểm danh thành công! Chuỗi {streak} ngày, +{xp} XP.",
     checkinError: "Điểm danh thất bại, thử lại nhé.",
     checkinHint: "Điểm danh mỗi ngày để nuôi chuỗi — càng liên tiếp càng nhiều XP (tối đa +40).",
     checkinGuest: "Đăng nhập để điểm danh mỗi ngày và nhận XP chuỗi!",
@@ -1480,11 +1486,11 @@ export const STR: Record<Lang, Strings> = {
     friendsOnline: "đang online",
     friendsInMatch: "đang đấu",
     friendsChallengeIncoming: "⚔️ Lời thách đấu",
-    challengeFrom: (name: string) => `⚔️ ${name} thách đấu bạn!`,
+    challengeFrom: "⚔️ {name} thách đấu bạn!",
     challengeAccept: "Vào đấu",
     challengeDecline: "Từ chối",
-    challengeDeclined: (name: string) => `${name} đã từ chối lời thách đấu.`,
-    hubChallengeTitle: (name: string) => `Thách đấu ${name}?`,
+    challengeDeclined: "{name} đã từ chối lời thách đấu.",
+    hubChallengeTitle: "Thách đấu {name}?",
     hubChallengeSend: "⚔️ Thách đấu",
     hubChallengeLater: "Để sau",
     hubChallengeError: "Không gửi được lời thách đấu. Vui lòng thử lại.",
@@ -1506,7 +1512,7 @@ export const STR: Record<Lang, Strings> = {
     roomCopyCode: "Chép mã",
     roomCopyLink: "Chép link mời",
     roomPromote: "Quảng bá",
-    roomPromoMembers: (n) => `Phòng có ${n} thành viên`,
+    roomPromoMembers: "Phòng có {n} thành viên",
     roomCopied: "Đã chép!",
     roomMembers: "Thành viên",
     roomTurnOrder: "Thứ tự thi đấu",
@@ -1538,7 +1544,7 @@ export const STR: Record<Lang, Strings> = {
     roomDeleteError: "Không xoá được phòng. Vui lòng thử lại.",
     roomDeletedNotice: "Phòng đã bị chủ phòng xoá.",
     roomYourTurn: "Đến lượt bạn!",
-    roomTurnOf: (name: string) => `Lượt của ${name}`,
+    roomTurnOf: "Lượt của {name}",
     roomSpectating: "Bạn đang xem trận này",
     roomReact: "Thả cảm xúc",
     roomWaiting: "Đang chờ đến lượt bạn…",
@@ -1568,7 +1574,7 @@ export const STR: Record<Lang, Strings> = {
     voiceListenConnected: "Đang nghe người chơi trò chuyện",
     voiceAllowListeners: "Cho khán giả nghe",
     voiceListenersPresent: "👂 Đang có khán giả nghe",
-    roomMoveBadge: (n: number) => `Nước ${n}`,
+    roomMoveBadge: "Nước {n}",
     roomRedWins: "🔴 Đỏ thắng",
     roomBlackWins: "⚫ Đen thắng",
     roomDraw: "Hòa",
@@ -1579,7 +1585,7 @@ export const STR: Record<Lang, Strings> = {
     roomMatchInProgress: "Đang có trận đấu diễn ra.",
     roomKicked: "Bạn đã bị mời ra khỏi phòng.",
     roomVs: "gặp",
-    roomWatchers: (n) => `${n} \u0111ang xem`,
+    roomWatchers: "{n} đang xem",
     roomPlaying: "Đang đấu",
     roomLobby: "Đang chờ",
     roomPublic: "Phòng công khai",
@@ -1593,7 +1599,7 @@ export const STR: Record<Lang, Strings> = {
     roomNoPublicRooms: "Chưa có phòng công khai nào — hãy tạo phòng đầu tiên!",
     roomHotRooms: "Phòng sôi động",
     roomMatches7d: "trận/7 ngày",
-    roomXpEarned: (n: number) => `+${n} XP`,
+    roomXpEarned: "+{n} XP",
     roomCreateTournament: "Tạo giải đấu",
     roomTournamentName: "Tên giải",
     roomTournamentNamePh: "VD: Giải mùa thu",
@@ -1621,17 +1627,15 @@ export const STR: Record<Lang, Strings> = {
     guestNoMatch: "Chưa có trận nào đang đánh — quay lại sau nhé.",
     guestNoRooms: "Chưa có phòng công khai nào. Đăng nhập để tạo phòng đầu tiên!",
     guestLive: "đang đánh",
-    inviteMembers: (n: number) => `${n} thành viên`,
+    inviteMembers: "{n} thành viên",
     inviteInvalid: "Link mời không hợp lệ hoặc đã hết hạn.",
-    guestTeaserGames: (n: number) => `Bạn đã chơi ${n} ván với tư cách khách`,
-    guestTeaserPuzzles: (n: number) => `giải ${n} thế cờ với tư cách khách`,
+    guestTeaserGames: "Bạn đã chơi {n} ván với tư cách khách",
+    guestTeaserPuzzles: "giải {n} thế cờ với tư cách khách",
     guestTeaserCta: "Đăng nhập miễn phí để lưu tiến trình và chơi cùng bạn bè!",
     victoryNudgeTitle: "\uD83C\uDF89 Thắng tuyệt vời!",
-    victoryNudgeText: (games: number) =>
-      `Tạo tài khoản miễn phí để lưu chiến thắng này vào hồ sơ — và giữ lại ${games} ván bạn đã chơi trên máy này. Tặng ngay +50 XP chào mừng!`,
+    victoryNudgeText: "Tạo tài khoản miễn phí để lưu chiến thắng này vào hồ sơ — và giữ lại {games} ván bạn đã chơi trên máy này. Tặng ngay +50 XP chào mừng!",
     puzzleNudgeTitle: "\uD83E\uDDE9 Giải hay lắm!",
-    puzzleNudgeText: (puzzles: number) =>
-      `Tạo tài khoản miễn phí để lưu chuỗi giải đố — và giữ lại ${puzzles} thế cờ bạn đã giải trên máy này. Tặng ngay +50 XP chào mừng!`,
+    puzzleNudgeText: "Tạo tài khoản miễn phí để lưu chuỗi giải đố — và giữ lại {puzzles} thế cờ bạn đã giải trên máy này. Tặng ngay +50 XP chào mừng!",
     nudgeSignup: "Đăng ký miễn phí",
     nudgeLater: "Để sau",
     refBannerText: "\uD83C\uDF81 Bạn được một người bạn mời — đăng ký để cả hai cùng nhận +20 XP!",
@@ -1652,7 +1656,7 @@ export const STR: Record<Lang, Strings> = {
     videoExport: "Xuất video",
     videoTitle: "Xuất video ván cờ",
     videoDesc: "Ghi lại toàn bộ ván cờ thành video clip có âm thanh để chia sẻ.",
-    videoMoves: (n: number) => `Ván cờ có ${n} nước đi`,
+    videoMoves: "Ván cờ có {n} nước đi",
     videoStart: "Bắt đầu ghi",
     videoRecording: "Đang ghi hình\u2026 giữ màn hình sáng.",
     videoCancel: "Hủy",
@@ -1667,22 +1671,24 @@ export const STR: Record<Lang, Strings> = {
     videoSpeedFast: "Nhanh",
     videoMic: "🎤 Thu giọng bình luận",
     videoMicDenied: "Không truy cập được micro.",
-    shareWinTitle: (level: string) => `Tôi đã thắng máy ${level}! \uD83C\uDFC6`,
+    shareWinTitle: "Tôi đã thắng máy {level}! 🏆",
     shareDrawTitle: "Ván cờ hòa! \uD83E\uDD1D",
     shareLossTitle: "Thua một ván hay! \uD83D\uDCAA",
-    shareGameSubtitle: (moves: number, opening: string | null) => `${moves} nước đi${opening ? ` \u00B7 ${opening}` : ""}`,
+    shareGameSubtitle: "{moves} nước đi",
+    shareGameSubtitleOpening: "{moves} nước đi · {opening}",
     shareFooter: "\uD83D\uDC49 Thách đấu ngay tại cotuongup.synerworlds.com",
     shareDone: "Đã chia sẻ! \uD83C\uDF89",
     shareDownloaded: "Đã tải ảnh + chép link \uD83D\uDCCB",
     sharePuzzleTitle: "Tôi đã giải thế cờ hôm nay! \uD83E\uDDE9",
-    sharePuzzleSubtitle: (moves: number) => `Chiếu hết trong ${moves} nước`,
-    sharedGameTitle: (level: number | null) => `Ván cờ được chia sẻ${level ? ` \u00B7 Máy cấp ${level}` : ""}`,
+    sharePuzzleSubtitle: "Chiếu hết trong {moves} nước",
+    sharedGameTitle: "Ván cờ được chia sẻ",
+    sharedGameTitleLevel: "Ván cờ được chia sẻ · Máy cấp {level}",
     achShare: "\uD83D\uDCE4 Khoe",
-    achStreakTitle: (days: number) => `\uD83D\uDD25 ${days} ngày giải đố liên tiếp!`,
-    streakShareBtn: (days) => `🔥 Khoe streak ${days} ngày`,
-    achRankTitle: (rank: number) => `\uD83C\uDFC6 Hạng #${rank} bảng xếp hạng!`,
+    achStreakTitle: "🔥 {days} ngày giải đố liên tiếp!",
+    streakShareBtn: "🔥 Khoe streak {days} ngày",
+    achRankTitle: "🏆 Hạng #{rank} bảng xếp hạng!",
     achProfileTitle: "Thành tích cờ úp của tôi",
-    achProfileLine: (title: string, rating: number, level: number) => `${title} \u00B7 ${rating} Elo \u00B7 Cấp ${level}`,
+    achProfileLine: "{title} · {rating} Elo · Cấp {level}",
     achCta: "\uD83D\uDC49 Chơi miễn phí tại cotuongup.synerworlds.com",
     blogLink: "\uD83D\uDCD6 Hướng dẫn",
     installApp: "📲 Cài đặt ứng dụng",
@@ -1704,15 +1710,15 @@ export const STR: Record<Lang, Strings> = {
     pushNudgeOn: "B\u1eadt",
     pushNudgeLater: "\u0110\u1ec3 sau",
     rushTab: "⚡ Puzzle Rush",
-    rushMateIn: (n) => `Chi\u1ebfu h\u1ebft trong ${n} n\u01b0\u1edbc \u2014 nhanh l\u00ean!`,
-    rushWrong: () => "Sai r\u1ed3i! Xem \u0111\u00e1p \u00e1n\u2026",
-    rushOver: (score, best) => `H\u1ebft gi\u1edd! B\u1ea1n gi\u1ea3i \u0111\u01b0\u1ee3c ${score} (k\u1ef7 l\u1ee5c ${best}).`,
+    rushMateIn: "Chiếu hết trong {n} nước — nhanh lên!",
+    rushWrong: "Sai rồi! Xem đáp án…",
+    rushOver: "Hết giờ! Bạn giải được {score} (kỷ lục {best}).",
     rushRetry: "Ch\u01a1i l\u1ea1i",
     rushBack: "Th\u1ebf c\u1edd",
     rushLives: "M\u1ea1ng",
     rushNewBest: "K\u1ef7 l\u1ee5c m\u1edbi!",
-    rushShareTitle: (score) => `T\u00f4i \u0111\u00e3 gi\u1ea3i ${score} th\u1ebf c\u1edd trong Puzzle Rush!`,
-    rushShareSubtitle: (score, best) => `${score} th\u1ebf c\u1edd \u00b7 k\u1ef7 l\u1ee5c ${best}`,
+    rushShareTitle: "Tôi đã giải {score} thế cờ trong Puzzle Rush!",
+    rushShareSubtitle: "{score} thế cờ · kỷ lục {best}",
     corrTitle: "C\u1edd th\u01b0",
     corrNew: "V\u00e1n m\u1edbi",
     corrLogin: "\u0110\u0103ng nh\u1eadp \u0111\u1ec3 ch\u01a1i c\u1edd th\u01b0.",
@@ -1723,10 +1729,9 @@ export const STR: Record<Lang, Strings> = {
     corrWaiting: "\u0110ang \u0111\u1ee3i",
     corrBack: "V\u00e1n c\u1ee7a t\u00f4i",
     corrYourMove: "\u0110\u1ebfn l\u01b0\u1ee3t b\u1ea1n \u2014 c\u1ee9 thong th\u1ea3.",
-    corrOppTurn: (name) => `\u0110ang \u0111\u1ee3i ${name}\u2026`,
+    corrOppTurn: "Đang đợi {name}…",
     corrHint: "M\u1ed7i l\u00fac r\u1ea3nh \u0111i m\u1ed9t n\u01b0\u1edbc. \u0110\u1ed1i th\u1ee7 s\u1ebd nh\u1eadn th\u00f4ng b\u00e1o \u0111\u1ea9y.",
-    ambStats: (invites: number, xp: number) =>
-      `\uD83C\uDF81 Đại sứ: đã mời ${invites} người \u00B7 kiếm được +${xp} XP`,
+    ambStats: "🎁 Đại sứ: đã mời {invites} người · kiếm được +{xp} XP",
     referralTitle: "\uD83C\uDF81 Mời bạn bè",
     referralDesc: "Gửi link cho bạn bè \u2014 khi bạn đăng nhập và chơi 1 ván, cả hai cùng +20 XP!",
     referralCopy: "Chép link mời",
@@ -1737,7 +1742,7 @@ export const STR: Record<Lang, Strings> = {
     cpTitleLabel: "T\u00EAn th\u1EBF c\u1EDD",
     cpTitlePh: "VD: Song xe ph\u00E1 s\u0129",
     cpMovesLabel: "Chi\u1EBFu h\u1EBFt trong",
-    cpMateIn: (n: number) => `${n} n\u01B0\u1EDBc`,
+    cpMateIn: "{n} nước",
     cpVerifyHint: "X\u1EBFp qu\u00E2n \u0110\u1ECF chi\u1EBFu h\u1EBFt trong s\u1ED1 n\u01B0\u1EDBc \u0111\u00E3 ch\u1ECDn. B\u1EA1n ph\u1EA3i t\u1EF1 \u0111\u00E1nh th\u1EAFng m\u00E1y \u0111\u1EC3 ch\u1EE9ng minh th\u1EBF c\u1EDD h\u1EE3p l\u1EC7.",
     cpVerifyBtn: "Ki\u1EC3m ch\u1EE9ng \u2192",
     cpBack: "Quay l\u1EA1i",
@@ -1747,7 +1752,7 @@ export const STR: Record<Lang, Strings> = {
     cpLoginRequired: "\u0110\u0103ng nh\u1EADp \u0111\u1EC3 t\u1EA1o th\u1EBF c\u1EDD.",
     cpPublished: "\u0110\u00E3 \u0111\u0103ng th\u1EBF c\u1EDD! \uD83C\uDF89",
     cpUntitled: "Th\u1EBF c\u1EDD kh\u00F4ng t\u00EAn",
-    cpBy: (name: string) => `c\u1EE7a ${name}`,
+    cpBy: "của {name}",
     cpPlay: "Ch\u01A1i",
     cpSolved: "\u0110\u00E3 gi\u1EA3i",
     cpBackToList: "Danh s\u00E1ch",
@@ -1765,16 +1770,19 @@ export const STR: Record<Lang, Strings> = {
     cpLibraryTitle: "Th\u01B0 vi\u1EC7n th\u1EBF c\u1EDD m\u1EAB u",
     cpLibraryHint: "60 th\u1EBF kinh \u0111i\u1EC3n \u0111\u00E3 ki\u1EC3m ch\u1EE9ng. Th\u1EBF c\u1EDD c\u1ED9ng \u0111\u1ED3ng \u0111\u1EA1t 8+ \u2764\uFE0F ho\u1EB7c 20+ \u2705 s\u1EBD t\u1EF1 \u0111\u1ED9ng \u0111\u01B0\u1EE3c tuy\u1EC3n ch\u1ECDn v\u00E0o \u2B50 b\u00EAn tr\u00EAn \u2014 ch\u1ECDn b\u1EA5t k\u1EF3 th\u1EBF n\u00E0o l\u00E0m \u0111i\u1EC3m xu\u1EA5t ph\u00E1t, bi\u1EBFn t\u1EA5u r\u1ED3i \u0111\u0103ng.",
     cpUseSample: "D\u00F9ng",
-    cpSampleLabel: (id: number) => `Th\u1EBF #${id}`,
+    cpSampleLabel: "Thế #{id}",
     cpRemix: "\uD83D\uDD00 Bi\u1EBFn t\u1EA5u th\u1EBF n\u00E0y",
-    cpRemixTitle: (name: string) => `Bi\u1EBFn t\u1EA5u: ${name}`,
+    cpRemixTitle: "Biến tấu: {name}",
     cpRename: "\u0110\u1ED5i t\u00EAn",
     cpRenameTitle: "\u0110\u1ED5i t\u00EAn th\u1EBF c\u1EDD",
     cpRenamed: "\u0110\u00E3 \u0111\u1ED5i t\u00EAn!",
     cpSave: "L\u01B0u",
     cpFeaturedSection: "C\u1ED9ng \u0111\u1ED3ng tuy\u1EC3n ch\u1ECDn",
     cpClassicSection: "Kinh \u0111i\u1EC3n",
-    cpSort: { new: "M\u1EDBi nh\u1EA5t", popular: "Hay nh\u1EA5t", weekly: "Top tu\u1EA7n", mine: "C\u1EE7a t\u00F4i" },
+    cpSortNew: "Mới nhất",
+    cpSortPopular: "Hay nhất",
+    cpSortWeekly: "Top tuần",
+    cpSortMine: "Của tôi",
     leaderboard: "Bảng xếp hạng",
     leaderboardLogin: "Đăng nhập để xem bảng xếp hạng.",
     leaderboardEmpty: "Chưa có người chơi nào — hãy là người đầu tiên!",
@@ -1818,7 +1826,7 @@ export const STR: Record<Lang, Strings> = {
     statsByYear: "Năm",
     resumedGame: "Đã khôi phục ván đang chơi dở",
     hintDepth: "độ sâu",
-    xpToNext: (xp, lvl) => `còn ${xp} XP lên Lv ${lvl}`,
+    xpToNext: "còn {xp} XP lên Lv {level}",
     authDisplayName: "Tên hiển thị (tùy chọn)",
     authDisplayNamePh: "Tên của bạn trên bảng xếp hạng",
     ratingProgress: "Tiến bộ rating",
@@ -1861,34 +1869,32 @@ export const STR: Record<Lang, Strings> = {
     loading: "Đang tải…",
     movesCount: "nước",
     replayBack: "Ván hiện tại",
-    resultText: (r) =>
-      r === "win" ? "Bạn thắng" : r === "loss" ? "Bạn thua" : "Hòa",
+    resultWin: "Bạn thắng",
+    resultLoss: "Bạn thua",
+    resultDraw: "Hòa",
     coachReview: "🎓 Xem lại với HLV",
     coachTitle: "HLV xem lại ván đấu",
     coachBack: "← Trở lại",
     coachAnalyzing: "Đang phân tích các nước đi của bạn…",
-    coachAnalyzed: (d, t) => `${d}/${t} thế cờ`,
+    coachAnalyzed: "{done}/{total} thế cờ",
     coachAccuracy: "Độ chính xác",
     coachTopMistakes: "Những nước đi tốn kém nhất",
     coachNoMistakes: "Không có sai lầm đáng kể — ván đấu sạch!",
     coachStrength: "Điểm sáng",
-    coachStrengthBrilliant: (move, gain) => `Nước tỏa sáng: ${move} (${gain})`,
-    coachStrengthStreak: (n, from, to) =>
-      `${n} nước liên tiếp đạt chuẩn máy (nước ${from}–${to})`,
-    coachStrengthBestRate: (rate) =>
-      `${rate}% số nước của bạn trùng với nước hay nhất của máy`,
-    coachStrengthStrongFinish: (before, after) =>
-      `Càng về cuối càng hay: hiệp 2 đạt ${after}, hiệp 1 đạt ${before}`,
-    coachStrengthSolidPhase: (phase) => `Chơi chắc chắn nhất ở ${phase}`,
+    coachStrengthBrilliant: "Nước tỏa sáng: {move} ({gain})",
+    coachStrengthStreak: "{n} nước liên tiếp đạt chuẩn máy (nước {from}–{to})",
+    coachStrengthBestRate: "{rate}% số nước của bạn trùng với nước hay nhất của máy",
+    coachStrengthStrongFinish: "Càng về cuối càng hay: hiệp 2 đạt {after}, hiệp 1 đạt {before}",
+    coachStrengthSolidPhase: "Chơi chắc chắn nhất ở {phase}",
     coachPhaseOpening: "khai cuộc",
     coachPhaseMiddlegame: "trung cuộc",
     coachPhaseEndgame: "tàn cuộc",
     coachBetter: "Tốt hơn",
     coachYouPlayed: "Bạn đã đi",
-    coachMoveNum: (n) => `Nước ${n}`,
+    coachMoveNum: "Nước {n}",
     coachShareCard: "📤 Chia sẻ thẻ kết quả",
     coachNoData: "Chưa đủ nước đi của bạn để xem lại — đánh ván dài hơn nhé!",
-    coachCardAccuracy: (n) => `Độ chính xác: ${n}/100`,
+    coachCardAccuracy: "Độ chính xác: {n}/100",
     liveTitle: "📡 Phát trực tiếp",
     liveMenu: "📡 Phát trực tiếp",
     liveIntro:
@@ -1919,7 +1925,7 @@ export const STR: Record<Lang, Strings> = {
     liveOutroTitle: "Cảm ơn bạn đã xem!",
     coveredPiece: "Quân úp",
     flipReveal: "Lật ngửa",
-    flippedTo: (name: string) => `Lật thành ${name}`,
+    flippedTo: "Lật thành {name}",
     coveredCapturedReveal:
       "Quân úp bị ăn sẽ được lật ngửa công khai ngay lập tức.",
     remainingDarkTitle: "Bộ bài còn úp",
@@ -1932,27 +1938,179 @@ export const STR: Record<Lang, Strings> = {
     roomDrawOffer: "🤝 Cầu hòa",
     roomDrawAccept: "✓ Chấp nhận hòa",
     roomDrawDecline: "✗ Từ chối",
-    roomDrawOfferedBy: (n: string) => `${n} đề nghị hòa`,
+    roomDrawOfferedBy: "{name} đề nghị hòa",
     roomDrawOffered: "Đối thủ đề nghị hòa",
     roomDrawWaiting: "Đã gửi đề nghị hòa…",
     roomDealVerified: "✓ Đã kiểm chứng phép xáo (hash khớp)",
     roomDealVerifyFailed: "✗ Hash phép xáo KHÔNG khớp!",
     roomRevealedTitle: "🃏 Bài thật của ván đấu",
-    roomFlipped: (t: string) => `Lật ra: ${t}`,
-    roomCapturedDark: (t: string) => `Ăn quân úp — lật ra: ${t}`,
+    roomFlipped: "Lật ra: {piece}",
+    roomCapturedDark: "Ăn quân úp — lật ra: {piece}",
     roomSendingMove: "Đang gửi nước đi…",
     roomReasonDraw120: "Hòa 120 nước",
     roomCoveredSuffix: " (úp)",
   },
 };
 
-export function detectLang(): Lang {
+/* ===== central-i18n preference helpers (family template) =====
+ * The bundled dictionaries stay the fallback; the hub store (via
+ * i18nCentral.ts) materialises further locales into STR at runtime, so
+ * `Lang` is an open string, never a closed union. */
+
+const KEY = "cu-lang";
+
+/** Substitute {placeholders} in a dictionary template string. */
+export function fmt(
+  template: string,
+  vars: Record<string, string | number>
+): string {
+  return template.replace(/\{(\w+)\}/g, (m, k: string) =>
+    k in vars ? String(vars[k]) : m
+  );
+}
+
+/** The player's stored locale preference, verbatim ("" when unset). It
+ *  may name a locale this build cannot render yet — the central loader
+ *  makes it renderable once the hub manifest marks it ready. */
+export function loadLangPreference(): string {
   try {
-    const saved = localStorage.getItem("cu-lang");
-    if (saved === "vi" || saved === "en") return saved;
+    return localStorage.getItem(KEY) ?? "";
   } catch {
-    /* storage unavailable */
+    return "";
   }
-  // Default to Vietnamese; the user can switch to English (saved on change).
-  return "vi";
+}
+
+/** Locale safe to render with RIGHT NOW: the stored preference when STR
+ *  already carries it (bundled, or materialised by the central loader),
+ *  else the VI default. The shell re-adopts the raw preference once the
+ *  loader publishes it as available. */
+export function loadLang(): Lang {
+  const pref = loadLangPreference();
+  return pref && pref in STR ? pref : "vi";
+}
+
+export function saveLang(l: Lang): void {
+  try {
+    localStorage.setItem(KEY, l);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Pre-migration name for loadLang() (kept for LegalPage). */
+export function detectLang(): Lang {
+  return loadLang();
+}
+
+/* ---- shared family preference + first-visit detection ----
+ * An explicit pick in ANY migrated game is mirrored into the `sw-lang`
+ * cookie on the shared parent domain, so the player's choice follows
+ * them across the whole family (the same .synerworlds.com cookie
+ * pattern the shared sign-in uses). Each game keeps its own pick,
+ * which wins locally. */
+
+const SHARED_KEY = "sw-lang";
+
+/** The family-wide shared preference from the `sw-lang` cookie
+ *  ("" when unset). Client-only; safe to call during first paint. */
+export function loadSharedLang(): string {
+  try {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${SHARED_KEY}=([^;]*)`));
+    return m ? decodeURIComponent(m[1]) : "";
+  } catch {
+    return "";
+  }
+}
+
+/** Mirror an explicit pick into the shared cookie: Domain=.synerworlds.com
+ *  on the family's own hosts (a host-only cookie elsewhere, where the
+ *  parent-domain attribute would be rejected anyway), Path=/, 1 year,
+ *  SameSite=Lax. */
+export function saveSharedLang(l: Lang): void {
+  try {
+    const host = location.hostname;
+    const onFamily = host === "synerworlds.com" || host.endsWith(".synerworlds.com");
+    const domain = onFamily ? "; Domain=.synerworlds.com" : "";
+    document.cookie = `${SHARED_KEY}=${encodeURIComponent(l)}; Path=/; Max-Age=31536000; SameSite=Lax${domain}`;
+  } catch {
+    /* ignore */
+  }
+}
+
+export interface CountryMapData {
+  default: string;
+  map: Record<string, string>;
+}
+
+/** Bundled fallback for the country→locale table — EXACTLY today's
+ *  family rules (VN→vi, LA→lo, TH→th, KH→km, francophone→fr, everything
+ *  else → the default en). The AUTHORITATIVE table is store data: the
+ *  hub manifest's `countryMap` (content/i18n/countries.json), loaded by
+ *  i18nCentral and passed into resolvePreferredLang by the shell. When
+ *  the hub adds a locale (ja/ko/es) the manifest table grows and this
+ *  fallback simply stays what it is — no code change anywhere. */
+export const BUNDLED_COUNTRY_MAP: CountryMapData = {
+  default: "en",
+  map: {
+    VN: "vi", LA: "lo", TH: "th", KH: "km",
+    FR: "fr", MC: "fr", SN: "fr", CI: "fr", ML: "fr", BF: "fr", NE: "fr",
+    GN: "fr", BJ: "fr", TG: "fr", CM: "fr", CD: "fr", CG: "fr", GA: "fr",
+    TD: "fr", DJ: "fr", MG: "fr", MU: "fr", SC: "fr", KM: "fr", VU: "fr",
+    NC: "fr", PF: "fr", WF: "fr", GF: "fr", GP: "fr", MQ: "fr", RE: "fr",
+    YT: "fr", BL: "fr", MF: "fr", PM: "fr", HT: "fr", LU: "fr",
+  },
+};
+
+/** Match browser language tags against the available locale codes:
+ *  exact code first, then primary subtag (fr-CA -> fr), then the tag's
+ *  REGION through the country→locale table (a browser set to a language
+ *  the store doesn't offer yet still lands on its country's locale
+ *  once the store offers it — e.g. ja-JP -> ja after the hub adds ja).
+ *  Returns the matched available code, or null. */
+export function matchBrowserLang(
+  tags: readonly string[],
+  available: readonly string[],
+  countryMap?: CountryMapData | null
+): string | null {
+  const cm = countryMap ?? BUNDLED_COUNTRY_MAP;
+  const codes = available.map((c) => c.toLowerCase());
+  for (const raw of tags) {
+    const tag = raw.toLowerCase();
+    const exact = codes.indexOf(tag);
+    if (exact >= 0) return available[exact];
+    const parts = tag.split("-");
+    const primary = codes.indexOf(parts[0]);
+    if (primary >= 0) return available[primary];
+    if (parts[1]) {
+      const mapped = cm.map[parts[1].toUpperCase()];
+      if (mapped) {
+        const idx = codes.indexOf(mapped.toLowerCase());
+        if (idx >= 0) return available[idx];
+      }
+    }
+  }
+  return null;
+}
+
+/** Preference resolution over the locales renderable RIGHT NOW: the
+ *  game's own stored pick first, then the shared family cookie, then —
+ *  only when neither store holds any choice at all — detection from the
+ *  browser's language tags + the country table. Returns null to keep
+ *  the current (VI-default) rendering; an explicit choice is never
+ *  overridden, and a stored choice for a locale that is not renderable
+ *  yet simply waits for the loader. */
+export function resolvePreferredLang(
+  available: readonly string[],
+  countryMap?: CountryMapData | null
+): string | null {
+  const own = loadLangPreference();
+  if (own) return available.includes(own) ? own : null;
+  const shared = loadSharedLang();
+  if (shared) return available.includes(shared) ? shared : null;
+  try {
+    const tags = navigator.languages?.length ? navigator.languages : [navigator.language];
+    return matchBrowserLang(tags.filter(Boolean), available, countryMap);
+  } catch {
+    return null;
+  }
 }

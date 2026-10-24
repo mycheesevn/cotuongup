@@ -6,6 +6,12 @@ export interface Strings {
   title: string;
   subtitle: string;
   copyright: string;
+  footerBrand: string;
+  footerTerms: string;
+  footerPrivacy: string;
+  footerContact: string;
+  footerRights: string;
+  footerAllGames: string;
   level: string;
   youPlay: string;
   redFirst: string;
@@ -621,6 +627,12 @@ export const STR: Record<Lang, Strings> = {
     title: "Jieqi · Dark Xiangqi",
     subtitle: "Play against the computer",
     copyright: "Copyright by SynerWork Inc. All rights reserved.",
+    footerBrand: "SynerWorlds - One account, every world.",
+    footerTerms: "Terms of Service",
+    footerPrivacy: "Privacy Policy",
+    footerContact: "Contact",
+    footerRights: "© SynerWork Inc. All rights reserved.",
+    footerAllGames: "All games",
     level: "Level",
     youPlay: "You play",
     redFirst: "Red (first)",
@@ -1276,6 +1288,12 @@ export const STR: Record<Lang, Strings> = {
     title: "Cờ Úp · Cờ tướng úp",
     subtitle: "Chơi với máy tính",
     copyright: "Bản quyền thuộc về SynerWork Inc. Mọi quyền được bảo lưu.",
+    footerBrand: "SynerWorlds - Một tài khoản, mọi bàn cờ.",
+    footerTerms: "Điều khoản dịch vụ",
+    footerPrivacy: "Chính sách bảo mật",
+    footerContact: "Liên hệ",
+    footerRights: "© SynerWork Inc. Bảo lưu mọi quyền.",
+    footerAllGames: "Tất cả trò chơi",
     level: "Cấp độ",
     youPlay: "Bạn cầm",
     redFirst: "Đỏ (đi trước)",

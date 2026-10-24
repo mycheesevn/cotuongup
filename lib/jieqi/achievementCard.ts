@@ -5,7 +5,7 @@ import type { Lang } from "./i18n";
 export type AchievementKind = "streak" | "rank" | "profile";
 
 export interface AchievementData {
-  /** Localized headline, e.g. s.achStreakTitle(days). */
+  /** Localized headline, e.g. fmt(s.achStreakTitle, { days }). */
   title: string;
   days?: number;
   rank?: number;

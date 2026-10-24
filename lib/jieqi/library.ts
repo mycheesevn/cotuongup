@@ -8,6 +8,13 @@ export interface LText {
   en: string;
 }
 
+/** Read a bilingual lesson text in the player's locale: lesson content
+ *  is authored vi/en only, so any other locale falls back to EN (the
+ *  family fallback for long-form content). */
+export function ltext(t: LText, lang: string): string {
+  return (t as unknown as Record<string, string>)[lang] ?? t.en;
+}
+
 export type QuizKind = "exact" | "mate";
 
 export interface LibraryStep {

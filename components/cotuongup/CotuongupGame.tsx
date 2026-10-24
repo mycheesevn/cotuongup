@@ -105,7 +105,22 @@ import {
   viewBoard,
   type GameStatus,
 } from "@/lib/jieqi/engine";
-import { detectLang, STR, type Lang } from "@/lib/jieqi/i18n";
+import {
+  fmt,
+  loadLang,
+  resolvePreferredLang,
+  saveLang,
+  saveSharedLang,
+  STR,
+  type Lang,
+} from "@/lib/jieqi/i18n";
+import { LangPicker } from "./LangPicker";
+import {
+  getAvailableLocales,
+  getCountryMap,
+  initCentralI18n,
+  subscribeI18n,
+} from "@/lib/jieqi/i18nCentral";
 import { detectOpening } from "@/lib/jieqi/openings";
 import {
   isMuted,
@@ -193,7 +208,39 @@ export function CotuongupGame() {
   const [level, setLevel] = useState<Level>(5);
   const [thinking, setThinking] = useState(false);
   const [aiStats, setAiStats] = useState<SearchStats | null>(null);
-  const [lang, setLang] = useState<Lang>(detectLang);
+  const [lang, setLang] = useState<Lang>(() => loadLang());
+  // Central i18n (design §6): bundled dictionaries render the first
+  // paint; the hub loader syncs central dictionaries in the background
+  // and bumps i18nTick when it applies them, so every STR[lang] read
+  // below re-resolves. The switcher's locale list comes from the hub
+  // manifest (bundled list until a manifest has been seen) — a new
+  // ready locale appears here with no game redeploy.
+  const [i18nTick, setI18nTick] = useState(0);
+  const [availableLocales, setAvailableLocales] = useState(getAvailableLocales);
+  useEffect(() => {
+    initCentralI18n();
+    return subscribeI18n(() => {
+      setI18nTick((t) => t + 1);
+      setAvailableLocales(getAvailableLocales());
+    });
+  }, []);
+  // Adopt the resolved preference once the central loader makes it
+  // renderable. Resolution order: this game's stored pick, then the
+  // shared sw-lang family cookie, then — only when neither holds a
+  // choice — browser-tag detection through the manifest's country
+  // table. Manual picks call saveLang, so this never fights a choice
+  // the player makes in this session.
+  useEffect(() => {
+    const next = resolvePreferredLang(availableLocales.map((l) => l.code), getCountryMap());
+    if (next && next !== lang) setLang(next);
+  }, [availableLocales, lang]);
+  const pickLang = (l: Lang) => {
+    setLang(l);
+    saveLang(l);
+    // Mirror the explicit pick into the shared family cookie so it
+    // follows the player to every other migrated game.
+    saveSharedLang(l);
+  };
   const [anim, setAnim] = useState<MoveAnim | null>(null);
   const [shakeId, setShakeId] = useState(0);
   const [muted, setMutedState] = useState(isMuted());
@@ -411,7 +458,7 @@ export function CotuongupGame() {
       setReplay({
         state: decoded.state,
         moves: decoded.moves,
-        title: s.sharedGameTitle(g.ai_level),
+        title: g.ai_level ? fmt(s.sharedGameTitleLevel, { level: g.ai_level }) : s.sharedGameTitle,
       });
       setMode("analysis");
     })();
@@ -553,7 +600,7 @@ export function CotuongupGame() {
       authUser.id,
       (c) => setIncomingChallenge(c),
       (name) => {
-        setDeclinedToast(s.challengeDeclined(name));
+        setDeclinedToast(fmt(s.challengeDeclined, { name: name }));
         window.setTimeout(() => setDeclinedToast(null), 4000);
       }
     );
@@ -763,6 +810,7 @@ export function CotuongupGame() {
   }, [state.state, mode]);
 
   const s = STR[lang];
+  void i18nTick; // re-read STR after the central loader applies updates
   const num = (v: string) => (lang === "vi" ? v.replace(".", ",") : v);
   const aiColor = opposite(playerColor);
   const levelCfg = getLevelConfig(level);
@@ -1058,7 +1106,7 @@ export function CotuongupGame() {
         // Referral reward for both sides once the referred user plays.
         claimReferralReward().then((xp) => {
           if (xp > 0) {
-            setShareToast(`🎉 ${STR[lang].roomXpEarned(xp)}`);
+            setShareToast(`🎉 ${fmt(STR[lang].roomXpEarned, { n: xp })}`);
             window.setTimeout(() => setShareToast(null), 4000);
             setProfileTick((t) => t + 1);
           }
@@ -1476,7 +1524,7 @@ export function CotuongupGame() {
       const link = await shareLink("/");
       const won = go.winner === playerColorRef.current;
       const title = won
-        ? s.shareWinTitle(s.levelLabel(level))
+        ? fmt(s.shareWinTitle, { level: fmt(s.levelLabel, { n: level }) })
         : go.winner === null
           ? s.shareDrawTitle
           : s.shareLossTitle;
@@ -1487,7 +1535,7 @@ export function CotuongupGame() {
       const canvas = renderShareCard({
         board: viewBoard(st.state),
         title,
-        subtitle: s.shareGameSubtitle(st.moveCodes.length, openingName),
+        subtitle: (openingName ? fmt(s.shareGameSubtitleOpening, { moves: st.moveCodes.length, opening: openingName }) : fmt(s.shareGameSubtitle, { moves: st.moveCodes.length })),
         footer: s.shareFooter,
       });
       const file = await canvasToPngFile(canvas, "co-up.png");
@@ -1495,7 +1543,7 @@ export function CotuongupGame() {
         file,
         fileName: "co-up.png",
         title,
-        text: `${title}\n${s.shareGameSubtitle(st.moveCodes.length, openingName)}`,
+        text: `${title}\n${(openingName ? fmt(s.shareGameSubtitleOpening, { moves: st.moveCodes.length, opening: openingName }) : fmt(s.shareGameSubtitle, { moves: st.moveCodes.length }))}`,
         url: link,
       });
       setShareToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -1516,7 +1564,7 @@ export function CotuongupGame() {
     if (!go || st.moveCodes.length === 0) return;
     const won = go.winner === playerColorRef.current;
     const title = won
-      ? s.shareWinTitle(s.levelLabel(level))
+      ? fmt(s.shareWinTitle, { level: fmt(s.levelLabel, { n: level }) })
       : go.winner === null
         ? s.shareDrawTitle
         : s.shareLossTitle;
@@ -1524,7 +1572,7 @@ export function CotuongupGame() {
       state: st.startState,
       moves: st.moveCodes,
       title,
-      subtitle: s.shareGameSubtitle(st.moveCodes.length, openingName),
+      subtitle: (openingName ? fmt(s.shareGameSubtitleOpening, { moves: st.moveCodes.length, opening: openingName }) : fmt(s.shareGameSubtitle, { moves: st.moveCodes.length })),
       shareUrl: await shareLink("/"),
     });
   };
@@ -1534,14 +1582,17 @@ export function CotuongupGame() {
       : state.gameOver.winner === null
         ? s.shareDrawTitle
         : state.gameOver.reason === "timeout"
-          ? s.timeout(winnerName(state.gameOver.winner))
+          ? fmt(s.timeout, { name: winnerName(state.gameOver.winner) })
           : state.gameOver.reason === "checkmate"
-            ? s.checkmate(winnerName(state.gameOver.winner))
-            : s.stalemate(winnerName(state.gameOver.winner))
-    : s.toMove(
-        state.state.turn === "red" ? s.redName : s.blackName,
-        state.inCheck
-      );
+            ? fmt(s.checkmate, { name: winnerName(state.gameOver.winner) })
+            : fmt(s.stalemate, { name: winnerName(state.gameOver.winner) })
+    : state.inCheck
+      ? fmt(s.toMoveCheck, {
+          color: state.state.turn === "red" ? s.redName : s.blackName,
+        })
+      : fmt(s.toMove, {
+          color: state.state.turn === "red" ? s.redName : s.blackName,
+        });
 
   const opening = useMemo(() => detectOpening(state.moveCodes), [state.moveCodes]);
   const openingName = opening
@@ -1581,9 +1632,22 @@ export function CotuongupGame() {
             ☰
           </button>
           <div className="cu-brand">
+            {/* Mobile header rule (owner, 2026-10-24): on small screens
+                the brand collapses to the game's icon so the top row —
+                icon + 🌐 picker + account — never wraps; the full name
+                stays on desktop. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="cu-brand-icon" src="/icon.svg" alt="" aria-hidden="true" width={30} height={30} />
             <h1 className="cu-title">{s.title}</h1>
           </div>
           <div className="cu-account">
+            <LangPicker
+              lang={lang}
+              locales={availableLocales}
+              label={s.language}
+              closeLabel={s.authClose}
+              onPick={(code) => pickLang(code as Lang)}
+            />
             {authConfigured &&
               (authUser ? (
                 <div className="cu-user" role="group" aria-label="Account">
@@ -1729,26 +1793,6 @@ export function CotuongupGame() {
                         </button>
                         {settingsExpanded && (
                           <div className="cu-account-menu-settings">
-                            <div
-                              className="cu-lang"
-                              role="group"
-                              aria-label="Language / Ngôn ngữ"
-                            >
-                              <button
-                                type="button"
-                                className={lang === "en" ? "active" : ""}
-                                onClick={() => setLang("en")}
-                              >
-                                EN
-                              </button>
-                              <button
-                                type="button"
-                                className={lang === "vi" ? "active" : ""}
-                                onClick={() => setLang("vi")}
-                              >
-                                VI
-                              </button>
-                            </div>
                             <button
                               type="button"
                               className="cu-btn small"
@@ -1806,26 +1850,6 @@ export function CotuongupGame() {
                       />
                       <div className="cu-account-menu" role="menu">
                         <div className="cu-account-menu-settings">
-                          <div
-                            className="cu-lang"
-                            role="group"
-                            aria-label="Language / Ngôn ngữ"
-                          >
-                            <button
-                              type="button"
-                              className={lang === "en" ? "active" : ""}
-                              onClick={() => setLang("en")}
-                            >
-                              EN
-                            </button>
-                            <button
-                              type="button"
-                              className={lang === "vi" ? "active" : ""}
-                              onClick={() => setLang("vi")}
-                            >
-                              VI
-                            </button>
-                          </div>
                           <button
                             type="button"
                             className="cu-btn small"
@@ -2047,7 +2071,7 @@ export function CotuongupGame() {
                     >
                       {LEVELS.map((l) => (
                         <option key={l.level} value={l.level}>
-                          {s.levelLabel(l.level)} — {s.levelDesc[l.level - 1]}
+                          {fmt(s.levelLabel, { n: l.level })} — {s.levelDesc[l.level - 1]}
                         </option>
                       ))}
                     </select>
@@ -2075,10 +2099,10 @@ export function CotuongupGame() {
                       className="cu-select"
                     >
                       <option value="inf">{s.unlimited}</option>
-                      <option value={60}>{s.minutes(1)}</option>
-                      <option value={180}>{s.minutes(3)}</option>
-                      <option value={300}>{s.minutes(5)}</option>
-                      <option value={600}>{s.minutes(10)}</option>
+                      <option value={60}>{fmt(s.minutes, { n: 1 })}</option>
+                      <option value={180}>{fmt(s.minutes, { n: 3 })}</option>
+                      <option value={300}>{fmt(s.minutes, { n: 5 })}</option>
+                      <option value={600}>{fmt(s.minutes, { n: 10 })}</option>
                     </select>
                   </label>
                 </section>
@@ -2205,7 +2229,7 @@ export function CotuongupGame() {
                         <span>.</span>
                       </span>
                       <span className="cu-think-meta">
-                        {s.thinkMeta(s.levelLabel(level), levelCfg.depth)}
+                        {fmt(s.thinkMeta, { level: fmt(s.levelLabel, { n: level }), depth: levelCfg.depth })}
                       </span>
                     </span>
                   </span>
@@ -2255,7 +2279,7 @@ export function CotuongupGame() {
                   <SignupNudge
                     lang={lang}
                     title={s.victoryNudgeTitle}
-                    text={s.victoryNudgeText(loadGuestStats().games)}
+                    text={fmt(s.victoryNudgeText, { games: loadGuestStats().games })}
                     onDismiss={() => setVictoryNudge(false)}
                   />
                 )}
@@ -2300,18 +2324,14 @@ export function CotuongupGame() {
                 <div className="cu-captured-row">
                   <span className="cu-captured-label">{s.strength}</span>
                   <span>
-                    {s.levelLabel(level)} · {s.levelDesc[level - 1]}
+                    {fmt(s.levelLabel, { n: level })} · {s.levelDesc[level - 1]}
                   </span>
                 </div>
                 <div className="cu-captured-row">
                   <span className="cu-captured-label">{s.lastSearch}</span>
                   <span className="cu-stats">
                     {aiStats
-                      ? s.searchStats(
-                          aiStats.depth,
-                          num(formatNodes(aiStats.nodes)),
-                          num((aiStats.timeMs / 1000).toFixed(1))
-                        )
+                      ? fmt(s.searchStats, { depth: aiStats.depth, nodes: num(formatNodes(aiStats.nodes)), secs: num((aiStats.timeMs / 1000).toFixed(1)) })
                       : "—"}
                   </span>
                 </div>
@@ -2428,7 +2448,7 @@ export function CotuongupGame() {
                 : "loss"
               : "draw"
           }
-          levelLabel={s.levelLabel(level)}
+          levelLabel={fmt(s.levelLabel, { n: level })}
           onBack={() => setMode("play")}
         />
       ) : mode === "setup" ? (
@@ -2532,7 +2552,7 @@ export function CotuongupGame() {
       {hubChallengeTarget && (
         <div className="cu-modal-backdrop" onClick={() => !hubChallengeBusy && setHubChallengeTarget(null)}>
           <div className="cu-modal" onClick={(e) => e.stopPropagation()}>
-            <h2>{s.hubChallengeTitle(hubChallengeTarget.name)}</h2>
+            <h2>{fmt(s.hubChallengeTitle, { name: hubChallengeTarget.name })}</h2>
             {hubChallengeMsg && (
               <p style={{ color: "var(--red, #d4382c)", margin: "0 0 8px" }} role="alert">
                 {hubChallengeMsg}
@@ -2587,7 +2607,7 @@ export function CotuongupGame() {
       {incomingChallenge && (
         <div className="cu-modal-root" role="dialog" aria-modal="true">
           <div className="cu-modal cu-challenge-modal">
-            <h3>{s.challengeFrom(incomingChallenge.challenger_name)}</h3>
+            <h3>{fmt(s.challengeFrom, { name: incomingChallenge.challenger_name })}</h3>
             <div className="cu-modal-actions">
               <button
                 type="button"

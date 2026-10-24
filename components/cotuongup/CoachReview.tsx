@@ -21,7 +21,7 @@ import {
 import { renderCoachCard, type CoachCardMistake } from "@/lib/jieqi/coachCard";
 import { canvasToPngFile } from "@/lib/jieqi/shareCard";
 import { shareLink, shareResultCard } from "@/lib/jieqi/share";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { viewBoard } from "@/lib/jieqi/engine";
 import type { Color, JieqiState } from "@/lib/jieqi/types";
 
@@ -139,13 +139,13 @@ export function CoachReview({
   const strengthText = (st: CoachStrength): string => {
     switch (st.kind) {
       case "brilliant":
-        return s.coachStrengthBrilliant(st.moveText ?? "", st.gainPawns ?? "");
+        return fmt(s.coachStrengthBrilliant, { move: st.moveText ?? "", gain: st.gainPawns ?? "" });
       case "streak":
-        return s.coachStrengthStreak(st.streak ?? 0, st.fromMove ?? 0, st.toMove ?? 0);
+        return fmt(s.coachStrengthStreak, { n: st.streak ?? 0, from: st.fromMove ?? 0, to: st.toMove ?? 0 });
       case "bestRate":
-        return s.coachStrengthBestRate(st.rate ?? 0);
+        return fmt(s.coachStrengthBestRate, { rate: st.rate ?? 0 });
       case "strongFinish":
-        return s.coachStrengthStrongFinish(st.halfBefore ?? 0, st.halfAfter ?? 0);
+        return fmt(s.coachStrengthStrongFinish, { before: st.halfBefore ?? 0, after: st.halfAfter ?? 0 });
       case "solidPhase": {
         const ph =
           st.phase === "opening"
@@ -153,14 +153,14 @@ export function CoachReview({
             : st.phase === "middlegame"
               ? s.coachPhaseMiddlegame
               : s.coachPhaseEndgame;
-        return s.coachStrengthSolidPhase(ph);
+        return fmt(s.coachStrengthSolidPhase, { phase: ph });
       }
     }
   };
 
   const cardTitle =
     result === "win"
-      ? s.shareWinTitle(levelLabel)
+      ? fmt(s.shareWinTitle, { level: levelLabel })
       : result === "draw"
         ? s.shareDrawTitle
         : s.shareLossTitle;
@@ -171,7 +171,7 @@ export function CoachReview({
     setSharing(true);
     try {
       const mistakes: CoachCardMistake[] = report.mistakes.map((m) => ({
-        headline: `${CLS_ICON[m.cls] ?? "?"} ${s.coachMoveNum(m.moveNumber)} · ${m.moveText}`,
+        headline: `${CLS_ICON[m.cls] ?? "?"} ${fmt(s.coachMoveNum, { n: m.moveNumber })} · ${m.moveText}`,
         detail: `${s.coachBetter}: ${m.bestMoveText} · ${formatEval(
           toRed(m.evalBefore)
         )} → ${formatEval(toRed(m.evalAfter))}`,
@@ -179,7 +179,7 @@ export function CoachReview({
       const canvas = renderCoachCard({
         board: viewBoard(positionAt(codes, codes.length, state)),
         title: cardTitle,
-        accuracyLine: s.coachCardAccuracy(report.accuracy),
+        accuracyLine: fmt(s.coachCardAccuracy, { n: report.accuracy }),
         mistakes,
         footer: s.shareFooter,
       });
@@ -189,7 +189,7 @@ export function CoachReview({
         file,
         fileName: "co-up-coach.png",
         title: cardTitle,
-        text: `${cardTitle}\n${s.coachCardAccuracy(report.accuracy)}`,
+        text: `${cardTitle}\n${fmt(s.coachCardAccuracy, { n: report.accuracy })}`,
         url: link,
       });
       setShareToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -224,7 +224,7 @@ export function CoachReview({
                     {s.coachAnalyzing}
                   </span>
                   <span className="cu-stats">
-                    {s.coachAnalyzed(analyzed, totalPlies + 1)}
+                    {fmt(s.coachAnalyzed, { done: analyzed, total: totalPlies + 1 })}
                   </span>
                 </div>
                 <div className="cu-progress" style={{ marginTop: 8 }}>
@@ -285,7 +285,7 @@ export function CoachReview({
                         <div className="cu-captured-row" style={{ marginBottom: 6 }}>
                           <span className="cu-captured-label">
                             <strong>
-                              {CLS_ICON[m.cls] ?? "?"} {s.coachMoveNum(m.moveNumber)}
+                              {CLS_ICON[m.cls] ?? "?"} {fmt(s.coachMoveNum, { n: m.moveNumber })}
                             </strong>{" "}
                             · {m.moveText}
                           </span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { useAuth } from "@/lib/supabase/AuthContext";
 import {
   deleteCommunityPuzzle,
@@ -157,7 +157,7 @@ export function CommunityView({
       const canvas = renderShareCard({
         board: viewBoard(parseFen(puzzle.fen)),
         title,
-        subtitle: `${s.mateIn(puzzle.moves_to_mate)} · ${s.cpBy(puzzle.creator_name)}`,
+        subtitle: `${fmt(s.mateIn, { n: puzzle.moves_to_mate })} · ${fmt(s.cpBy, { name: puzzle.creator_name })}`,
         footer: s.shareFooter,
       });
       const file = await canvasToPngFile(canvas, "co-up-cong-dong.png");
@@ -165,7 +165,7 @@ export function CommunityView({
         file,
         fileName: "co-up-cong-dong.png",
         title,
-        text: `${title}\n${s.mateIn(puzzle.moves_to_mate)}`,
+        text: `${title}\n${fmt(s.mateIn, { n: puzzle.moves_to_mate })}`,
         url: link,
       });
       showToast(outcome === "shared" ? s.shareDone : s.shareDownloaded);
@@ -206,7 +206,7 @@ export function CommunityView({
               {p.title || s.cpUntitled}
             </strong>
             <span className="cu-muted">
-              {s.cpBy(p.creator_name)} · ✅ {p.solves} · ❤️ {p.likes}
+              {fmt(s.cpBy, { name: p.creator_name })} · ✅ {p.solves} · ❤️ {p.likes}
               {p.solved_by_me ? ` · ✓ ${s.cpSolved}` : ""}
             </span>
           </div>
@@ -236,7 +236,7 @@ export function CommunityView({
                   name: "create",
                   seed: {
                     fen: p.fen,
-                    title: s.cpRemixTitle(p.title || s.cpUntitled),
+                    title: fmt(s.cpRemixTitle, { name: p.title || s.cpUntitled }),
                   },
                 })
               }
@@ -359,7 +359,7 @@ export function CommunityView({
                   className={`cu-btn small${sort === k ? " primary" : ""}`}
                   onClick={() => setSort(k)}
                 >
-                  {s.cpSort[k]}
+                  {{ new: s.cpSortNew, popular: s.cpSortPopular, weekly: s.cpSortWeekly, mine: s.cpSortMine }[k]}
                 </button>
               ))}
             </div>
@@ -395,11 +395,11 @@ export function CommunityView({
                         {p.is_featured ? "⭐ " : ""}
                         {p.title || s.cpUntitled}
                       </strong>
-                      <span className="cu-tag">{s.mateIn(p.moves_to_mate)}</span>
+                      <span className="cu-tag">{fmt(s.mateIn, { n: p.moves_to_mate })}</span>
                     </div>
                     <div className="cu-community-card-meta">
                       <span>
-                        {s.cpBy(p.creator_name)} · ✅ {p.solves} · ❤️ {p.likes}
+                        {fmt(s.cpBy, { name: p.creator_name })} · ✅ {p.solves} · ❤️ {p.likes}
                       </span>
                       {p.solved_by_me && (
                         <span className="cu-quest-claimed">✓ {s.cpSolved}</span>

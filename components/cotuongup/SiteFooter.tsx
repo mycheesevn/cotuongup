@@ -9,7 +9,7 @@
 
 import HandoffLink from "./HandoffLink";
 import FooterGames from "./FooterGames";
-import { STR } from "@/lib/jieqi/i18n";
+import { STR, type Lang } from "@/lib/jieqi/i18n";
 
 const GAMES: Array<{ vi: string; en: string; url: string }> = [
   { vi: "Cờ tướng", en: "Xiangqi", url: "https://cotuong.synerworlds.com" },
@@ -47,12 +47,11 @@ export default function SiteFooter({
   lang,
   className,
 }: {
-  lang: "vi" | "en";
+  lang: Lang;
   className: string;
 }) {
-  const en = lang === "en";
   const s = STR[lang];
-  const q = en ? "?lang=en" : "";
+  const q = lang === "vi" ? "" : `?lang=${lang}`;
   const linkStyle = { color: "inherit" } as const;
   return (
     <footer

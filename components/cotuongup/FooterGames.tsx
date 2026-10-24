@@ -13,7 +13,7 @@
 
 import { useEffect, useState } from "react";
 import HandoffLink from "./HandoffLink";
-import { STR } from "@/lib/jieqi/i18n";
+import { STR, type Lang } from "@/lib/jieqi/i18n";
 
 export type FooterGame = { vi: string; en: string; url: string };
 
@@ -78,11 +78,11 @@ export default function FooterGames({
   fallback,
   linkStyle,
 }: {
-  lang: "vi" | "en";
+  lang: Lang;
   fallback: FooterGame[];
   linkStyle?: React.CSSProperties;
 }) {
-  const en = lang === "en";
+  const en = lang !== "vi";
   const s = STR[lang];
   const [games, setGames] = useState<FooterGame[]>(fallback);
   useEffect(() => {

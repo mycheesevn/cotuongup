@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { useAuth } from "@/lib/supabase/AuthContext";
 import {
   claimCheckin,
@@ -74,7 +74,7 @@ export function CheckinView({
       setResult(
         r.already_claimed
           ? s.checkinDone
-          : s.checkinClaimed(r.streak, r.xp_awarded)
+          : fmt(s.checkinClaimed, { streak: r.streak, xp: r.xp_awarded })
       );
       await load();
     } catch {
@@ -113,7 +113,7 @@ export function CheckinView({
         <div className="cu-room-home">
           <h3>📅 {s.checkinTitle}</h3>
           {streak > 0 && (
-            <p className="cu-empty-note">🔥 {s.checkinStreak(streak)}</p>
+            <p className="cu-empty-note">🔥 {fmt(s.checkinStreak, { n: streak })}</p>
           )}
           <div className="cu-checkin-week">
             {week.map((d) => (

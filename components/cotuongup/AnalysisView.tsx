@@ -13,7 +13,7 @@ import {
   type ClassifiedMove,
   type PlyAnalysis,
 } from "@/lib/jieqi/analysis";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { commentOnMove } from "@/lib/jieqi/commentary";
 import {
   applyMove,
@@ -446,7 +446,7 @@ export function AnalysisView({
       >
         <span className="cu-movenum">{Math.floor(i / 2) + 1}.</span>
         {c && (
-          <span className={`cu-cls cu-cls-${c.cls}`} title={s.moveClass[c.cls]}>
+          <span className={`cu-cls cu-cls-${c.cls}`} title={{ best: s.moveClassBest, good: s.moveClassGood, inaccuracy: s.moveClassInaccuracy, mistake: s.moveClassMistake, blunder: s.moveClassBlunder }[c.cls]}>
             {CLS_ICON[c.cls]}
           </span>
         )}
@@ -510,7 +510,7 @@ export function AnalysisView({
           </div>
           <div className="cu-captured-row">
             <span className="cu-captured-label">
-              {analyzing !== null ? s.analyzing : s.toMove(turn === "red" ? s.redName : s.blackName, false)}
+              {analyzing !== null ? s.analyzing : fmt(s.toMove, { color: turn === "red" ? s.redName : s.blackName })}
             </span>
             <span className="cu-stats">
               {curEvalRed === null ? "…" : formatEval(curEvalRed)}
@@ -519,9 +519,9 @@ export function AnalysisView({
           {gameEnded && winner && (
             <div className="cu-captured-row">
               <span className="cu-captured-label">
-                {(endedInCheck ? s.checkmate : s.stalemate)(
-                  winner === "red" ? s.redName : s.blackName
-                )}
+                {fmt(endedInCheck ? s.checkmate : s.stalemate, {
+                  name: winner === "red" ? s.redName : s.blackName,
+                })}
               </span>
             </div>
           )}
@@ -603,10 +603,10 @@ export function AnalysisView({
               title={s.playSpeed}
               aria-label={s.playSpeed}
             >
-              <option value={1000}>{s.playSpeedSec(1)}</option>
-              <option value={2000}>{s.playSpeedSec(2)}</option>
-              <option value={3000}>{s.playSpeedSec(3)}</option>
-              <option value={5000}>{s.playSpeedSec(5)}</option>
+              <option value={1000}>{fmt(s.playSpeedSec, { n: 1 })}</option>
+              <option value={2000}>{fmt(s.playSpeedSec, { n: 2 })}</option>
+              <option value={3000}>{fmt(s.playSpeedSec, { n: 3 })}</option>
+              <option value={5000}>{fmt(s.playSpeedSec, { n: 5 })}</option>
             </select>
           </div>
           {autoOn && (

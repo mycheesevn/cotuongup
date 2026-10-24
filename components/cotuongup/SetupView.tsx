@@ -23,7 +23,7 @@ import {
   type SetupPiece,
 } from "@/lib/jieqi/setup";
 import { PUZZLES } from "@/lib/jieqi/puzzles";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { useAuth } from "@/lib/supabase/AuthContext";
 import {
   deleteSetup,
@@ -545,7 +545,7 @@ export function SetupView({ lang, onPlay, onCvc, level, onLevelChange, initialTa
                 >
                   {LEVELS.map((l) => (
                     <option key={l.level} value={l.level}>
-                      {s.levelLabel(l.level)} — {s.levelDesc[l.level - 1]}
+                      {fmt(s.levelLabel, { n: l.level })} — {s.levelDesc[l.level - 1]}
                     </option>
                   ))}
                 </select>
@@ -610,9 +610,9 @@ export function SetupView({ lang, onPlay, onCvc, level, onLevelChange, initialTa
                   onChange={(e) => setMovesToMate(Number(e.target.value))}
                   className="cu-select"
                 >
-                  <option value={1}>{s.cpMateIn(1)}</option>
-                  <option value={2}>{s.cpMateIn(2)}</option>
-                  <option value={3}>{s.cpMateIn(3)}</option>
+                  <option value={1}>{fmt(s.cpMateIn, { n: 1 })}</option>
+                  <option value={2}>{fmt(s.cpMateIn, { n: 2 })}</option>
+                  <option value={3}>{fmt(s.cpMateIn, { n: 3 })}</option>
                 </select>
               </label>
               <p className="cu-hint">{s.cpVerifyHint}</p>
@@ -755,8 +755,8 @@ export function SetupView({ lang, onPlay, onCvc, level, onLevelChange, initialTa
                   {featured.map((p) => (
                     <li key={p.id}>
                       <span>
-                        ⭐ {p.title || s.cpUntitled} · {s.cpBy(p.creator_name)} ·{" "}
-                        {s.mateIn(p.moves_to_mate)}
+                        ⭐ {p.title || s.cpUntitled} · {fmt(s.cpBy, { name: p.creator_name })} ·{" "}
+                        {fmt(s.mateIn, { n: p.moves_to_mate })}
                       </span>
                       <button
                         type="button"
@@ -775,7 +775,7 @@ export function SetupView({ lang, onPlay, onCvc, level, onLevelChange, initialTa
               {libPagination.pageItems.map((p) => (
                 <li key={p.id}>
                   <span>
-                    {s.cpSampleLabel(p.id)} · {s.mateIn(p.movesToMate)}
+                    {fmt(s.cpSampleLabel, { id: p.id })} · {fmt(s.mateIn, { n: p.movesToMate })}
                   </span>
                   <button
                     type="button"

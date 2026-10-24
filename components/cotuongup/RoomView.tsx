@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { useAuth } from "@/lib/supabase/AuthContext";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { RoomDetail } from "./RoomDetail";
@@ -210,7 +210,7 @@ export function RoomView({
                   <>
                     <p className="cu-invite-room">👥 {preview.name}</p>
                     <p className="cu-empty-note">
-                      {s.inviteMembers(preview.member_count)}
+                      {fmt(s.inviteMembers, { n: preview.member_count })}
                     </p>
                     {preview.rules ? (
                       <p className="cu-room-rules-text cu-invite-rules">

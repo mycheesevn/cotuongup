@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   exportReplayVideo,
   type ReplayVideoInput,
@@ -159,7 +159,7 @@ export function VideoExportModal({ lang, game, onClose }: Props) {
           <>
             <p className="cu-empty-note">{s.videoDesc}</p>
             <p className="cu-empty-note">
-              {s.videoMoves(game.moves.length)}
+              {fmt(s.videoMoves, { n: game.moves.length })}
             </p>
             <div className="cu-video-row">
               <span className="cu-video-label">{s.videoSpeed}</span>

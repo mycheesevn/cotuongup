@@ -837,12 +837,13 @@ export function CotuongupGame() {
   const clocksRef = useRef<{ red: number; black: number } | null>(null);
   const timeControlRef = useRef<number | null>(null);
 
+  // NOTE: no localStorage persistence here. The pre-migration shell
+  // persisted `lang` from this effect, but combined with the central
+  // resolve effect (which reads the stored preference) the one-commit
+  // lag made the two effects flip the language vi<->en forever.
+  // Explicit picks persist synchronously in pickLang (saveLang), the
+  // family pattern; adopted preferences are re-derived on every load.
   useEffect(() => {
-    try {
-      localStorage.setItem("cu-lang", lang);
-    } catch {
-      /* storage unavailable */
-    }
     document.documentElement.lang = lang;
   }, [lang]);
 

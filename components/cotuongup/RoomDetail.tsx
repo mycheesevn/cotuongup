@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import { useAuth } from "@/lib/supabase/AuthContext";
 import { RoomMatchView } from "./RoomMatchView";
 import { TournamentCard } from "./TournamentCard";
@@ -260,7 +260,7 @@ export function RoomDetail({ lang, roomId, onExit }: Props) {
       const canvas = renderRoomPromoCard({
         roomName: room.name,
         code: room.code,
-        memberLine: s.roomPromoMembers(members.length),
+        memberLine: fmt(s.roomPromoMembers, { n: members.length }),
         footer: s.shareFooter,
       });
       const file = await canvasToPngFile(canvas, `phong-${room.code}.png`);

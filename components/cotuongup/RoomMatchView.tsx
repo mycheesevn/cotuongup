@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { STR, type Lang } from "@/lib/jieqi/i18n";
+import { fmt, STR, type Lang } from "@/lib/jieqi/i18n";
 import {
   findGeneral,
   isInCheck,
@@ -275,7 +275,7 @@ export function RoomMatchView({
     if (!xp) return;
     const total = xp.play_xp + xp.host_xp + xp.daily_xp;
     if (total <= 0) return;
-    setXpToast(`🎉 ${s.roomXpEarned(total)}`);
+    setXpToast(`🎉 ${fmt(s.roomXpEarned, { n: total })}`);
     // Event name kept as-is family-wide (listeners in XiangqiGame /
     // QuestCard still use the legacy string; renaming is a shell task).
     window.dispatchEvent(new CustomEvent("xq:profile-refresh"));
@@ -533,7 +533,7 @@ export function RoomMatchView({
       ? s.roomSendingMove
       : myColor && turn === myColor
         ? s.roomYourTurn
-        : s.roomTurnOf(turn === "red" ? redName : blackName);
+        : fmt(s.roomTurnOf, { name: turn === "red" ? redName : blackName });
 
   const reasonText =
     match.reason === "checkmate"
@@ -603,23 +603,23 @@ export function RoomMatchView({
           )}
           {lastRecord?.flipped && lastRecord.revealedType && (
             <div className="cu-room-turn-label" aria-live="polite">
-              🃏 {s.roomFlipped(pieceNames[lastRecord.revealedType])}
+              🃏 {fmt(s.roomFlipped, { piece: pieceNames[lastRecord.revealedType] })}
             </div>
           )}
           {lastRecord?.captured?.wasCovered && (
             <div className="cu-room-turn-label" aria-live="polite">
-              💥 {s.roomCapturedDark(pieceNames[lastRecord.captured.trueType])}
+              💥 {fmt(s.roomCapturedDark, { piece: pieceNames[lastRecord.captured.trueType] })}
             </div>
           )}
           {myColor === null && active && (
             <div className="cu-room-spectate-badge">
               👁 {s.roomSpectating}
-              {spectatorCount > 0 && ` · ${s.roomWatchers(spectatorCount)}`}
+              {spectatorCount > 0 && ` · ${fmt(s.roomWatchers, { n: spectatorCount })}`}
             </div>
           )}
           {myColor !== null && spectatorCount > 2 && (
             <div className="cu-room-spectate-badge">
-              👁 {s.roomWatchers(spectatorCount - 2)}
+              👁 {fmt(s.roomWatchers, { n: spectatorCount - 2 })}
             </div>
           )}
           {match.status === "finished" && (
@@ -781,11 +781,9 @@ export function RoomMatchView({
                 {drawOfferByOpponent && (
                   <>
                     <span className="cu-empty-note">
-                      {s.roomDrawOfferedBy(
-                        drawOfferByOpponent === match.red_id
+                      {fmt(s.roomDrawOfferedBy, { name: drawOfferByOpponent === match.red_id
                           ? redName
-                          : blackName
-                      )}
+                          : blackName })}
                     </span>
                     <button
                       type="button"
